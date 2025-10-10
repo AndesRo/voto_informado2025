@@ -6,74 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     inicializarNoticias();
 });
 
-// ============================================
-// CONFIGURACIÓN DE RSS FEEDS DE MEDIOS CHILENOS
-// ============================================
-
-const RSS_FEEDS_CHILE = {
-    'latercera': {
-        url: 'https://www.latercera.com/feed',
-        name: 'La Tercera',
-        category: 'general'
-    },
-    'emol': {
-        url: 'https://www.emol.com/rss/noticias.xml',
-        name: 'Emol',
-        category: 'general'
-    },
-    'cooperativa': {
-        url: 'https://www.cooperativa.cl/noticias/site/tax/port/all/rss____1.xml',
-        name: 'Cooperativa',
-        category: 'general'
-    },
-    'biobio': {
-        url: 'https://www.biobiochile.cl/rss',
-        name: 'BioBio Chile',
-        category: 'general'
-    },
-    't13': {
-        url: 'https://www.t13.cl/rss',
-        name: 'T13',
-        category: 'general'
-    },
-    'cnnchile': {
-        url: 'https://www.cnnchile.com/rss',
-        name: 'CNN Chile',
-        category: 'general'
-    },
-    'elmostrador': {
-        url: 'https://www.elmostrador.cl/feed/',
-        name: 'El Mostrador',
-        category: 'general'
-    },
-    'lasegunda': {
-        url: 'https://www.lasegunda.com/feed',
-        name: 'La Segunda',
-        category: 'general'
-    },
-    'pauta': {
-        url: 'https://www.pauta.cl/rss',
-        name: 'Pauta',
-        category: 'general'
-    },
-    'ex_ante': {
-        url: 'https://www.ex-ante.cl/feed/',
-        name: 'Ex-Ante',
-        category: 'política'
-    },
-    'ladiaria': {
-        url: 'https://www.ladiaria.com.uy/es/feed/',
-        name: 'La Diaria',
-        category: 'política'
-    }
-};
-
-// Servicios de proxy RSS gratuitos (alternativas)
-const RSS_PROXY_SERVICES = [
-    'https://api.rss2json.com/v1/api.json?rss_url=',
-    'https://rss-to-json-serverless-api.vercel.app/api?feedUrl=',
-    'https://thingproxy.freeboard.io/fetch/'
-];
 
 // Variables globales
 let candidatos = [];
@@ -110,10 +42,6 @@ async function cargarDatos() {
     }
 }
 
-// ============================================
-// CARGA DE NOTICIAS CHILENAS
-// ============================================
-
 // Función principal para cargar noticias chilenas
 async function cargarNoticiasChilenas() {
     try {
@@ -132,15 +60,7 @@ async function cargarNoticiasChilenas() {
         // Esperar a que todas las promesas se resuelvan
         const resultados = await Promise.allSettled(noticiasPromesas);
         
-        // Combinar todas las noticias exitosas
-        const todasNoticias = [];
-        resultados.forEach((resultado, index) => {
-            if (resultado.status === 'fulfilled' && resultado.value) {
-                todasNoticias.push(...resultado.value);
-                console.log(`✅ ${Object.keys(RSS_FEEDS_CHILE)[index]}: ${resultado.value.length} noticias`);
-            }
-        });
-
+    
         if (todasNoticias.length > 0) {
             // Ordenar por fecha y eliminar duplicados
             noticiasReales = filtrarYOrdenarNoticias(todasNoticias);
@@ -157,27 +77,6 @@ async function cargarNoticiasChilenas() {
     }
 }
 
-// Función para cargar noticias de un RSS específico
-async function cargarNoticiasRSS(fuenteKey) {
-    try {
-        const fuente = RSS_FEEDS_CHILE[fuenteKey];
-        if (!fuente) return [];
-
-        const proxyUrl = obtenerProxyUrl() + encodeURIComponent(fuente.url);
-        console.log(`📡 Cargando: ${fuente.name}`);
-        
-        const response = await fetch(proxyUrl);
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-        
-        const data = await response.json();
-        return procesarNoticiasRSS(data, fuente);
-    } catch (error) {
-        console.warn(`⚠️ No se pudo cargar ${fuenteKey}:`, error.message);
-        return [];
-    }
-}
 
 // Función para obtener URL del proxy (rotación entre servicios)
 function obtenerProxyUrl() {
@@ -237,57 +136,6 @@ function filtrarYOrdenarNoticias(noticias) {
     }).slice(0, 30); // Limitar a 30 noticias totales
 }
 
-// ============================================
-// RENDERIZADO DE NOTICIAS CHILENAS
-// ============================================
-
-function renderizarNoticiasChilenas() {
-    const container = document.getElementById('noticias-grid');
-    if (!noticiasReales || noticiasReales.length === 0) {
-        mostrarEstadoSinNoticias();
-        return;
-    }
-
-    container.innerHTML = noticiasReales.map(noticia => `
-        <div class="noticia-card" data-category="${noticia.category || 'general'}">
-            <div class="noticia-imagen">
-                ${noticia.image_url ? `
-                    <img src="${noticia.image_url}" alt="${noticia.title}" 
-                         loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                ` : ''}
-                <div class="noticia-icono" style="${noticia.image_url ? 'display: none;' : ''}">
-                    <i class="fas fa-newspaper"></i>
-                </div>
-                <div class="noticia-fuente-badge">${noticia.fuente || noticia.source}</div>
-            </div>
-            <div class="noticia-contenido">
-                <div class="noticia-header">
-                    <span class="noticia-fuente">${noticia.fuente || noticia.source}</span>
-                    <span class="noticia-fecha">${formatearFechaChilena(noticia.published_at)}</span>
-                </div>
-                <h3 class="noticia-titulo">${noticia.title}</h3>
-                <p class="noticia-descripcion">${noticia.description || 'Haz clic para leer más sobre esta noticia.'}</p>
-                <div class="noticia-acciones">
-                    <a href="${noticia.link}" target="_blank" rel="noopener noreferrer" class="btn-noticia">
-                        <i class="fas fa-external-link-alt"></i> Leer en ${noticia.fuente || noticia.source}
-                    </a>
-                    <button class="btn-noticia btn-compartir" 
-                            onclick="compartirNoticia('${noticia.link.replace(/'/g, "\\'")}', '${noticia.title.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-share"></i> Compartir
-                    </button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-
-    // Añadir filtros y estadísticas
-    agregarFiltrosNoticias();
-    actualizarContadorNoticias();
-}
-
-// ============================================
-// FUNCIONES AUXILIARES
-// ============================================
 
 // Función para formatear fecha en formato chileno
 function formatearFechaChilena(fechaStr) {
@@ -369,40 +217,7 @@ function agregarFiltrosNoticias() {
     }
 }
 
-// Función para aplicar filtro a noticias
-function aplicarFiltroNoticias(filtro) {
-    const noticias = document.querySelectorAll('.noticia-card');
-    
-    noticias.forEach(noticia => {
-        if (filtro === 'todas' || noticia.getAttribute('data-category') === filtro) {
-            noticia.style.display = 'block';
-        } else {
-            noticia.style.display = 'none';
-        }
-    });
-    
-    // Actualizar contador visible
-    const visibles = document.querySelectorAll('.noticia-card[style="display: block"]').length;
-    document.getElementById('contador-actual').textContent = visibles;
-}
 
-// Función para actualizar contador
-function actualizarContadorNoticias() {
-    const contador = document.getElementById('contador-noticias');
-    const actualizacion = document.getElementById('actualizacion-noticias');
-    
-    if (contador) {
-        contador.textContent = noticiasReales.length;
-    }
-    
-    if (actualizacion) {
-        const ahora = new Date();
-        actualizacion.textContent = ahora.toLocaleTimeString('es-CL', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }
-}
 
 // ============================================
 // FALLBACKS Y MANEJO DE ERRORES
@@ -857,11 +672,6 @@ function actualizarEstadisticasNoticias() {
     }
 }
 
-// ============================================
-// INICIALIZACIÓN FINAL
-// ============================================
-
-console.log('🚀 Aplicación Voto Informado Chile 2025 - Noticias chilenas en tiempo real inicializada');
 
 // Datos de fallback
 function cargarDatosFallback() {
