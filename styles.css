@@ -405,11 +405,40 @@ body {
     cursor: pointer;
     transition: var(--transicion);
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
-.btn-secundario:hover {
+/* Hover / foco */
+.btn-secundario:hover,
+.btn-secundario:focus {
     background: var(--color-gris);
     color: var(--color-blanco);
+    transform: translateY(-2px);
+}
+
+/* Estado activo (clic) */
+.btn-secundario:active {
+    transform: scale(0.97);
+}
+
+/* 📱 Responsividad para móviles */
+@media (max-width: 640px) {
+    .btn-secundario {
+        width: 100%;              /* Se expande al ancho del contenedor */
+        padding: 14px 16px;       /* Más alto para facilidad táctil */
+        font-size: 1rem;          /* Texto ligeramente más grande */
+        border-radius: 10px;      /* Bordes suaves tipo “app” */
+    }
+    .btn-secundario i {
+        font-size: 1.2rem;        /* Ícono un poco más grande */
+    }
 }
 
 .btn-compartir {
@@ -2603,6 +2632,7 @@ body {
         padding: 15px;
     }
 }
+
 
 
 
