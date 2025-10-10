@@ -15,72 +15,6 @@
     --transicion: all 0.3s ease;
 }
 
-/* Botón secundario general */
-.btn-secundario {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background-color: #f3f4f6;
-  color: #1e3a8a;
-  border: 2px solid #1e3a8a;
-  border-radius: 12px;
-  padding: 0.8rem 1.4rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s ease-in-out;
-  text-align: center;
-  width: auto;
-  max-width: 100%;
-}
-
-/* Icono dentro del botón */
-.btn-secundario i {
-  font-size: 1.1rem;
-  transition: transform 0.25s ease;
-}
-
-/* Hover / Enfocado */
-.btn-secundario:hover,
-.btn-secundario:focus {
-  background-color: #1e3a8a;
-  color: #ffffff;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(30, 58, 138, 0.3);
-}
-
-.btn-secundario:hover i {
-  transform: scale(1.15);
-}
-
-/* Activo (al hacer clic) */
-.btn-secundario:active {
-  transform: scale(0.96);
-  box-shadow: none;
-}
-
-/* 📱 Responsivo para pantallas pequeñas */
-@media (max-width: 640px) {
-  .btn-secundario {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.05rem;
-  }
-  .btn-secundario i {
-    font-size: 1.2rem;
-  }
-}
-
-/* 💻 Responsivo para pantallas grandes */
-@media (min-width: 1024px) {
-  .btn-secundario {
-    font-size: 1rem;
-    padding: 0.9rem 1.6rem;
-  }
-}
-
-
 * {
     margin: 0;
     padding: 0;
@@ -2669,5 +2603,6 @@ body {
         padding: 15px;
     }
 }
+
 
 
