@@ -1,0 +1,23 @@
+{
+  "name": "Voto Informado Chile 2025",
+  "short_name": "VotoInformado",
+  "description": "Plataforma informativa sobre candidatos presidenciales chilenos 2025.",
+  "start_url": "https://andesro.github.io/voto_informado2025/",
+  "scope": "/voto_informado2025/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3a8a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "images/favicon/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/favicon/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,497 @@
+{
+  "candidatos": [
+    {
+      "id": "jara",
+      "nombre": "Jeannette Jara Román",
+      "partido": "Partido Comunista de Chile / Unidad por Chile",
+      "edad": 51,
+      "profesion": "Abogada y Administradora Pública",
+      "region": "Región Metropolitana",
+      "religion": "No especificada",
+      "estado_civil": "No especificado",
+      "foto": "images/jara.jpg",
+      "lema": "Un Chile que cumple",
+      "biografia": "Abogada y administradora pública, ejerció como ministra del Trabajo y Previsión Social bajo el gobierno de Gabriel Boric (2022-2025). Previamente fue subsecretaria de Previsión Social en el gobierno de Michelle Bachelet (2016-2018). Ganadora de las primarias del oficialismo con el 60,3% de los votos.",
+      "experiencia_politica": "8 años en cargos públicos de alto nivel",
+      "cargos_previos": [
+        "Ministra del Trabajo y Previsión Social (2022-2025)",
+        "Subsecretaria de Previsión Social (2016-2018)"
+      ],
+      "propuestas": [
+        "Aumento del salario mínimo de $529.000 a $750.000",
+        "Eliminación de las AFP y reforma del sistema previsional",
+        "Sala cuna universal para aumentar participación laboral femenina",
+        "Fortalecimiento del Estado social en salud, educación y vivienda",
+        "Reducción de jornada laboral y modernización del trabajo"
+      ],
+      "aprobacion": 26,
+      "posiciones": [4, 3, 4, 4, 4, 4, 4, 3, 4, 4],
+      "financiamiento": {
+        "total": 2850000000,
+        "tipo": {
+          "publico": 45,
+          "privado": 55
+        },
+        "fuentes_principales": [
+          {
+            "nombre": "Fondos públicos SERVEL",
+            "monto": 1282500000,
+            "tipo": "publico"
+          },
+          {
+            "nombre": "Aportes militancia PC",
+            "monto": 856500000,
+            "tipo": "privado"
+          },
+          {
+            "nombre": "Sindicatos adherentes",
+            "monto": 427500000,
+            "tipo": "privado"
+          },
+          {
+            "nombre": "Colectas ciudadanas",
+            "monto": 285000000,
+            "tipo": "privado"
+          }
+        ],
+        "reportes_servel": [
+          {
+            "fecha": "2025-08-15",
+            "tipo": "Declaración de ingresos",
+            "estado": "Aprobado"
+          },
+          {
+            "fecha": "2025-09-20",
+            "tipo": "Gastos campaña primaria",
+            "estado": "En revisión"
+          },
+          {
+            "fecha": "2025-10-05",
+            "tipo": "Declaración patrimonio",
+            "estado": "Pendiente"
+          }
+        ],
+        "alertas": [
+          {
+            "tipo": "info",
+            "descripcion": "Cumple límite aportes individuales",
+            "estado": "Verificado"
+          },
+          {
+            "tipo": "advertencia",
+            "descripcion": "Falta declarar gastos propaganda online",
+            "estado": "En observación"
+          }
+        ],
+        "transparencia": 85
+      },
+      "noticias": [
+        {
+          "titulo": "Jara presenta programa 'Un Chile que cumple' con 380 medidas",
+          "fecha": "2025-10-05",
+          "fuente": "La Tercera"
+        },
+        {
+          "titulo": "Candidata oficialista lidera encuestas tras primarias",
+          "fecha": "2025-09-28",
+          "fuente": "Cadem"
+        }
+      ]
+    },
+    {
+      "id": "kast",
+      "nombre": "José Antonio Kast Rist",
+      "partido": "Partido Republicano / Cambio por Chile",
+      "edad": 59,
+      "profesion": "Abogado",
+      "region": "Región Metropolitana",
+      "religion": "Católica",
+      "estado_civil": "Casado",
+      "foto": "images/kast.jpg",
+      "lema": "Chile Orden y Libertad",
+      "biografia": "Abogado egresado de la Pontificia Universidad Católica de Chile. Fundador y líder del Partido Republicano. Fue diputado durante cuatro períodos consecutivos (2002-2018) y candidato presidencial en 2017 y 2021, llegando a segunda vuelta en 2021.",
+      "experiencia_politica": "25 años en política",
+      "cargos_previos": [
+        "Diputado de la República (2002-2018)",
+        "Concejal de Buin (1996-2000)",
+        "Candidato presidencial 2017 y 2021"
+      ],
+      "propuestas": [
+        "Fortalecimiento del orden público y seguridad ciudadana",
+        "Defensa de la propiedad privada y libre mercado",
+        "Control fronterizo y políticas anti-inmigración irregular",
+        "Reducción del tamaño del Estado",
+        "Promoción de valores familiares tradicionales"
+      ],
+      "aprobacion": 24,
+      "posiciones": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      "financiamiento": {
+        "total": 3200000000,
+        "tipo": {
+          "publico": 40,
+          "privado": 60
+        },
+        "fuentes_principales": [
+          {
+            "nombre": "Fondos públicos SERVEL",
+            "monto": 1280000000,
+            "tipo": "publico"
+          },
+          {
+            "nombre": "Empresarios adherentes",
+            "monto": 960000000,
+            "tipo": "privado"
+          },
+          {
+            "nombre": "Aportes partido Republicano",
+            "monto": 640000000,
+            "tipo": "privado"
+          },
+          {
+            "nombre": "Colectas simpatizantes",
+            "monto": 320000000,
+            "tipo": "privado"
+          }
+        ],
+        "reportes_servel": [
+          {
+            "fecha": "2025-08-10",
+            "tipo": "Declaración de ingresos",
+            "estado": "Aprobado"
+          },
+          {
+            "fecha": "2025-09-25",
+            "tipo": "Gastos campaña",
+            "estado": "Con observaciones"
+          },
+          {
+            "fecha": "2025-10-08",
+            "tipo": "Aportes privados",
+            "estado": "En revisión"
+          }
+        ],
+        "alertas": [
+          {
+            "tipo": "advertencia",
+            "descripcion": "Observación por gastos no declarados",
+            "estado": "En proceso"
+          },
+          {
+            "tipo": "info",
+            "descripcion": "Cumple plazo declaraciones",
+            "estado": "Verificado"
+          }
+        ],
+        "transparencia": 75
+      },
+      "noticias": [
+        {
+          "titulo": "Kast se consolida como líder de la derecha republicana",
+          "fecha": "2025-09-15",
+          "fuente": "Emol"
+        },
+        {
+          "titulo": "Partido Republicano define estrategia para primera vuelta",
+          "fecha": "2025-10-01",
+          "fuente": "El Mercurio"
+        }
+      ]
+    },
+    {
+      "id": "matthei",
+      "nombre": "Evelyn Matthei Fornet",
+      "partido": "Unión Demócrata Independiente / Chile Vamos",
+      "edad": 71,
+      "profesion": "Economista",
+      "region": "Región Metropolitana",
+      "religion": "Católica",
+      "estado_civil": "Viuda",
+      "foto": "images/matthei.jpg",
+      "lema": "Orden, Progreso y Esperanza",
+      "biografia": "Economista y política con amplia trayectoria. Fue alcaldesa de Providencia (2016-2024), ministra del Trabajo (2011-2013), senadora (1998-2011) y diputada (1990-1998). Candidata única de Chile Vamos tras exitosa gestión municipal.",
+      "experiencia_politica": "35 años en política",
+      "cargos_previos": [
+        "Alcaldesa de Providencia (2016-2024)",
+        "Ministra del Trabajo y Previsión Social (2011-2013)",
+        "Senadora de la República (1998-2011)",
+        "Diputada de la República (1990-1998)"
+      ],
+      "propuestas": [
+        "Recuperación del orden y control territorial",
+        "Modernización de las policías y lucha contra el narcotráfico",
+        "Destrabar la inversión y simplificación tributaria",
+        "Revolución en infraestructura y desarrollo tecnológico",
+        "Fortalecimiento de industrias estratégicas (minería, energía, turismo)"
+      ],
+      "aprobacion": 17,
+      "posiciones": [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+      "financiamiento": {
+        "total": 2750000000,
+        "tipo": {
+          "publico": 50,
+          "privado": 50
+        },
+        "fuentes_principales": [
+          {
+            "nombre": "Fondos públicos SERVEL",
+            "monto": 1375000000,
+            "tipo": "publico"
+          },
+          {
+            "nombre": "Aportes UDI",
+            "monto": 687500000,
+            "tipo": "privado"
+          },
+          {
+            "nombre": "Empresarios Chile Vamos",
+            "monto": 412500000,
+            "tipo": "privado"
+          },
+          {
+            "nombre": "Colectas territoriales",
+            "monto": 275000000,
+            "tipo": "privado"
+          }
+        ],
+        "reportes_servel": [
+          {
+            "fecha": "2025-08-20",
+            "tipo": "Declaración de ingresos",
+            "estado": "Aprobado"
+          },
+          {
+            "fecha": "2025-09-28",
+            "tipo": "Gastos campaña",
+            "estado": "Aprobado"
+          },
+          {
+            "fecha": "2025-10-06",
+            "tipo": "Aportes privados",
+            "estado": "En revisión"
+          }
+        ],
+        "alertas": [
+          {
+            "tipo": "info",
+            "descripcion": "Todos los reportes al día",
+            "estado": "Verificado"
+          },
+          {
+            "tipo": "advertencia",
+            "descripcion": "Falta detalle gastos publicidad",
+            "estado": "Por corregir"
+          }
+        ],
+        "transparencia": 90
+      },
+      "noticias": [
+        {
+          "titulo": "Matthei presenta equipos programáticos con más de 400 personas",
+          "fecha": "2025-07-25",
+          "fuente": "Evópoli"
+        },
+        {
+          "titulo": "Candidata de Chile Vamos define ejes de campaña",
+          "fecha": "2025-09-20",
+          "fuente": "La Tercera"
+        }
+      ]
+    },
+    {
+      "id": "parisi",
+      "nombre": "Franco Aldo Parisi Fernández",
+      "partido": "Partido de la Gente",
+      "edad": 58,
+      "profesion": "Economista e Ingeniero Comercial",
+      "region": "Región Metropolitana",
+      "religion": "No especificada",
+      "estado_civil": "No especificado",
+      "foto": "images/parisi.jpg",
+      "lema": "La Gente al Poder",
+      "biografia": "Economista e ingeniero comercial. Candidato presidencial en 2013 (4° lugar) y 2021 (3° lugar). Fundador del Partido de la Gente. Se presenta como alternativa al establishment político tradicional, rechazando la polarización 'facho-comunacho'.",
+      "experiencia_politica": "12 años en política",
+      "cargos_previos": [
+        "Candidato presidencial 2013 y 2021",
+        "Fundador del Partido de la Gente (2019)"
+      ],
+      "propuestas": [
+        "Reducción del gasto fiscal y alivio tributario a clase media",
+        "Eliminación del clientelismo político",
+        "Vuelta a la meritocracia en el sector público",
+        "Reforma del sistema político para mayor representatividad",
+        "Políticas económicas pragmáticas sin ideología"
+      ],
+      "aprobacion": 8,
+      "posiciones": [2, 2, 2, 2, 2, 3, 2, 2, 2, 3],
+      "financiamiento": {
+        "total": 1200000000,
+        "tipo": {
+          "publico": 35,
+          "privado": 65
+        },
+        "fuentes_principales": [
+          {
+            "nombre": "Fondos públicos SERVEL",
+            "monto": 420000000,
+            "tipo": "publico"
+          },
+          {
+            "nombre": "Aportes Partido de la Gente",
+            "monto": 360000000,
+            "tipo": "privado"
+          },
+          {
+            "nombre": "Financiamiento colectivo",
+            "monto": 240000000,
+            "tipo": "privado"
+          },
+          {
+            "nombre": "Aportes simpatizantes",
+            "monto": 180000000,
+            "tipo": "privado"
+          }
+        ],
+        "reportes_servel": [
+          {
+            "fecha": "2025-08-25",
+            "tipo": "Declaración de ingresos",
+            "estado": "Con observaciones"
+          },
+          {
+            "fecha": "2025-09-30",
+            "tipo": "Gastos campaña",
+            "estado": "Pendiente"
+          },
+          {
+            "fecha": "2025-10-07",
+            "tipo": "Aportes privados",
+            "estado": "En revisión"
+          }
+        ],
+        "alertas": [
+          {
+            "tipo": "alerta",
+            "descripcion": "Retraso en declaración de gastos",
+            "estado": "Crítico"
+          },
+          {
+            "tipo": "advertencia",
+            "descripcion": "Falta documentación aportes",
+            "estado": "En proceso"
+          }
+        ],
+        "transparencia": 60
+      },
+      "noticias": [
+        {
+          "titulo": "Parisi se posiciona como tercera vía entre extremos",
+          "fecha": "2025-10-04",
+          "fuente": "La Tercera"
+        },
+        {
+          "titulo": "PDG apuesta por capturar voto independiente",
+          "fecha": "2025-09-12",
+          "fuente": "El Mostrador"
+        }
+      ]
+    },
+    {
+      "id": "kaiser",
+      "nombre": "Johannes Kaiser Barents",
+      "partido": "Partido Nacional Libertario",
+      "edad": 49,
+      "profesion": "YouTuber y Político",
+      "region": "Región Metropolitana",
+      "religion": "Cristiana",
+      "estado_civil": "No especificado",
+      "foto": "images/kaiser.jpg",
+      "lema": "Nueva Derecha Libertaria",
+      "biografia": "YouTuber convertido en político. Diputado desde 2022, inicialmente por el Partido Republicano, fundó el Partido Nacional Libertario en 2024. Se autodefine como 'reaccionario' y representa la extrema derecha libertaria con posturas controversiales.",
+      "experiencia_politica": "3 años como diputado",
+      "cargos_previos": [
+        "Diputado de la República (2022-presente)",
+        "Fundador Partido Nacional Libertario (2024)"
+      ],
+      "propuestas": [
+        "Estado mínimo y reducción drástica del aparato público",
+        "Políticas anti-inmigración y control fronterizo estricto",
+        "Defensa de valores tradicionales y conservadores",
+        "Crítica al sistema político establecido",
+        "Promoción de libertades individuales y tenencia de armas"
+      ],
+      "aprobacion": 11,
+      "posiciones": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      "financiamiento": {
+        "total": 800000000,
+        "tipo": {
+          "publico": 30,
+          "privado": 70
+        },
+        "fuentes_principales": [
+          {
+            "nombre": "Fondos públicos SERVEL",
+            "monto": 240000000,
+            "tipo": "publico"
+          },
+          {
+            "nombre": "Aportes Partido Nacional Libertario",
+            "monto": 280000000,
+            "tipo": "privado"
+          },
+          {
+            "nombre": "Donaciones plataforma online",
+            "monto": 160000000,
+            "tipo": "privado"
+          },
+          {
+            "nombre": "Aportes adherentes",
+            "monto": 120000000,
+            "tipo": "privado"
+          }
+        ],
+        "reportes_servel": [
+          {
+            "fecha": "2025-08-30",
+            "tipo": "Declaración de ingresos",
+            "estado": "Con observaciones"
+          },
+          {
+            "fecha": "2025-09-22",
+            "tipo": "Gastos campaña",
+            "estado": "Rechazado"
+          },
+          {
+            "fecha": "2025-10-04",
+            "tipo": "Aportes privados",
+            "estado": "En revisión"
+          }
+        ],
+        "alertas": [
+          {
+            "tipo": "alerta",
+            "descripcion": "Reporte de gastos rechazado por SERVEL",
+            "estado": "Crítico"
+          },
+          {
+            "tipo": "advertencia",
+            "descripcion": "Aportes no identificados",
+            "estado": "En investigación"
+          }
+        ],
+        "transparencia": 45
+      },
+      "noticias": [
+        {
+          "titulo": "Kaiser genera polémica al defender golpe de Estado",
+          "fecha": "2025-07-03",
+          "fuente": "El País"
+        },
+        {
+          "titulo": "PNL busca consolidar espacio en extrema derecha",
+          "fecha": "2025-08-15",
+          "fuente": "BBC"
+        }
+      ]
+    }
+  ]
+}

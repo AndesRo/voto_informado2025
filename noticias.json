@@ -1,0 +1,53 @@
+{
+  "noticias": [
+    {
+      "id": 1,
+      "titulo": "Encuesta Cadem: Jara mantiene liderazgo con 26% mientras Kast alcanza 24%",
+      "imagen": "encuesta-octubre-2025.jpg",
+      "fuente": "Cadem",
+      "fecha": "2025-10-06",
+      "descripcion": "La última medición muestra a Jeannette Jara liderando las preferencias presidenciales, seguida de cerca por José Antonio Kast en una carrera que se estrecha."
+    },
+    {
+      "id": 2,
+      "titulo": "Matthei presenta equipos programáticos con propuestas en cinco áreas clave",
+      "imagen": "matthei-programa.jpg",
+      "fuente": "El Mercurio",
+      "fecha": "2025-09-28",
+      "descripcion": "La candidata de Chile Vamos detalló sus propuestas en seguridad, bienestar, desarrollo, bases institucionales y relaciones internacionales."
+    },
+    {
+      "id": 3,
+      "titulo": "Parisi se posiciona como alternativa al 'establishment facho-comunacho'",
+      "imagen": "parisi-campana.jpg",
+      "fuente": "La Tercera",
+      "fecha": "2025-10-04",
+      "descripcion": "El candidato del PDG busca capturar el voto independiente rechazando la polarización tradicional de la política chilena."
+    },
+    {
+      "id": 4,
+      "titulo": "Kaiser genera controversia con declaraciones sobre golpe de Estado",
+      "imagen": "kaiser-polemica.jpg",
+      "fuente": "CNN Chile",
+      "fecha": "2025-07-03",
+      "descripcion": "El candidato del PNL defendió el pronunciamiento militar de 1973 y manifestó que apoyaría un nuevo quiebre democrático en ciertas circunstancias."
+    },
+    {
+      "id": 5,
+      "titulo": "Jara presenta 'Un Chile que cumple': programa con 380 medidas",
+      "imagen": "programa-jara.jpg",
+      "fuente": "La Tercera",
+      "fecha": "2025-10-05",
+      "descripcion": "La candidata oficialista detalló su propuesta de gobierno estructurada en cuatro pilares fundamentales para el período 2026-2030."
+    },
+    {
+      "id": 6,
+      "titulo": "Servel confirma cinco candidaturas para elecciones de noviembre",
+      "imagen": "candidatos-2025.jpg",
+      "fuente": "Servicio Electoral",
+      "fecha": "2025-08-19",
+      "descripcion": "El organismo electoral ratificó las postulaciones presidenciales tras verificar el cumplimiento de requisitos legales."
+    }
+  ]
+}
+   

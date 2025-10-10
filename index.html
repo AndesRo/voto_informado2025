@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voto Informado Chile 2025 - Plataforma Electoral Transparente</title>
+    <meta name="description" content="Información completa sobre candidatos presidenciales chilenos 2025. Compara propuestas, financiamiento de campañas y encuentra tu candidato compatible.">
+    <meta name="keywords" content="elecciones Chile 2025, candidatos presidenciales, voto informado, política chilena, SERVEL, financiamiento campañas">
+    <meta name="author" content="Andrés Romero Millaquén">
+    
+<!-- Open Graph / WhatsApp / Facebook -->
+<meta property="og:title" content="🇨🇱 Voto Informado Chile 2025">
+<meta property="og:description" content="Compara candidatos presidenciales chilenos 2025 y encuentra tu candidato compatible.">
+<meta property="og:image" content="https://andesro.github.io/voto_informado2025/images/favicon/og-image-1200x630.png">
+<meta property="og:url" content="https://andesro.github.io/voto_informado2025/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="🇨🇱 Voto Informado Chile 2025">
+<meta name="twitter:description" content="Compara candidatos presidenciales chilenos 2025 y encuentra tu candidato compatible.">
+<meta name="twitter:image" content="https://andesro.github.io/voto_informado2025/images/favicon/og-image-1200x630.png">
+<meta name="twitter:site" content="@andresromero">
+<meta name="twitter:creator" content="@andresromero">
+
+<!-- Favicon y Apple Touch Icons -->
+<link rel="apple-touch-icon" sizes="180x180" href="images/favicon/web-app-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon/web-app-512x512.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon.ico">
+<link rel="manifest" href="manifest.json">
+<link rel="mask-icon" href="images/favicon/web-app-512x512.png" color="#1e3a8a">
+<link rel="shortcut icon" href="images/favicon/web-app-512x512.png">
+<meta name="theme-color" content="#1e3a8a">
+
+    
+    <!-- Preload de fuentes críticas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Hojas de estilo -->
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Voto Informado Chile 2025",
+        "description": "Plataforma informativa sobre candidatos presidenciales chilenos 2025",
+        "url": "https://votoinformado2025.cl",
+        "applicationCategory": "Application",
+        "operatingSystem": "Web Browser",
+        "author": {
+            "@type": "Person",
+            "name": "Andrés Romero Millaquén",
+            "jobTitle": "Desarrollador",
+            "url": "https://andresromero.dev"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "CL"
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Pantalla de Inicio -->
+    <section id="inicio" class="section active">
+        <div class="container">
+            <header class="hero">
+                <div class="logo-container">
+                    <img src="images/favicon/web-app-manifest-512x512.png" alt="Voto Informado Chile 2025" class="logo-image" onerror="this.style.display='none'">
+                    <h1 class="logo">Voto Informado Chile 2025</h1>
+                </div>
+                <p class="descripcion">
+                    Infórmate antes de votar. Conoce a los candidatos, compara sus posturas y forma tu propia opinión.
+                </p>
+                <button class="btn-principal" onclick="mostrarSeccion('candidatos')">
+                    <i class="fas fa-users"></i> Ver Candidatos
+                </button>
+            </header>
+            <div class="stats">
+                <div class="stat-item">
+                    <h3>5</h3>
+                    <p>Candidatos</p>
+                </div>
+                <div class="stat-item">
+                    <h3>16 Nov</h3>
+                    <p>Primera Vuelta</p>
+                </div>
+                <div class="stat-item">
+                    <h3>14 Dic</h3>
+                    <p>Segunda Vuelta</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Listado de Candidatos -->
+    <section id="candidatos" class="section">
+        <div class="container">
+            <h2>Candidatos Presidenciales 2025</h2>
+            <div class="candidatos-grid" id="candidatos-grid">
+                <!-- Los candidatos se cargan dinámicamente -->
+            </div>
+            <div class="acciones">
+                <button class="btn-secundario" onclick="mostrarSeccion('comparador')">
+                    <i class="fas fa-balance-scale"></i> Comparar Candidatos
+                </button>
+                <button class="btn-secundario" onclick="mostrarSeccion('noticias')">
+                    <i class="fas fa-newspaper"></i> Ver Noticias
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Perfil del Candidato -->
+    <section id="perfil" class="section">
+        <div class="container">
+            <div class="perfil-candidato" id="perfil-candidato">
+                <!-- El perfil se carga dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+<!-- Comparador -->
+<section id="comparador" class="section">
+    <div class="container">
+        <h2>Comparador de Candidatos</h2>
+        
+        <div class="selectores">
+            <div class="selector-group">
+                <label for="candidato1">
+                    <i class="fas fa-user"></i> Primer Candidato:
+                </label>
+                <select id="candidato1" onchange="actualizarComparacion()">
+                    <option value="">Selecciona un candidato</option>
+                </select>
+            </div>
+            <div class="selector-group">
+                <label for="candidato2">
+                    <i class="fas fa-user"></i> Segundo Candidato:
+                </label>
+                <select id="candidato2" onchange="actualizarComparacion()">
+                    <option value="">Selecciona un candidato</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="acciones-comparador">
+            <button class="btn-comparador" onclick="intercambiarCandidatos()">
+                <i class="fas fa-exchange-alt"></i> Intercambiar
+            </button>
+            <button class="btn-comparador btn-secundario" onclick="limpiarComparacion()">
+                <i class="fas fa-times"></i> Limpiar
+            </button>
+        </div>
+        
+        <div id="comparacion-resultado" class="comparacion-resultado">
+            <p class="mensaje-comparacion">
+                Selecciona dos candidatos diferentes para compararlos
+            </p>
+        </div>
+        
+        <div class="grafico-container">
+            <h3>📊 Comparación Visual</h3>
+            <canvas id="graficoComparacion"></canvas>
+        </div>
+    </div>
+</section>
+
+    <!-- Simulador de Voto Programático -->
+    <section id="simulador" class="section">
+        <div class="container">
+            <h2>Simulador de Voto Programático</h2>
+            <p class="descripcion-simulador">Responde estas preguntas sobre tus preferencias políticas y descubre qué candidato se alinea mejor con tus ideas.</p>
+            
+            <div class="progreso-simulador">
+                <div class="barra-progreso-simulador">
+                    <div class="progreso" id="progreso-preguntas"></div>
+                </div>
+                <span id="contador-preguntas">Pregunta 1 de 10</span>
+            </div>
+
+            <form id="cuestionario-voto" class="cuestionario">
+                <!-- Las preguntas se cargan dinámicamente -->
+            </form>
+
+            <div id="resultado-simulador" class="resultado-simulador" style="display: none;">
+                <!-- El resultado se muestra aquí -->
+            </div>
+
+            <div class="acciones-simulador">
+                <button id="btn-anterior" class="btn-secundario" style="display: none;">
+                    <i class="fas fa-arrow-left"></i> Anterior
+                </button>
+                <button id="btn-siguiente" class="btn-principal">
+                    Siguiente <i class="fas fa-arrow-right"></i>
+                </button>
+                <button id="btn-finalizar" class="btn-exito" style="display: none;">
+                    <i class="fas fa-check"></i> Ver Resultado
+                </button>
+                <button id="btn-reiniciar" class="btn-secundario" style="display: none;">
+                    <i class="fas fa-redo"></i> Volver a Empezar
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calendario Electoral -->
+    <section id="calendario" class="section">
+        <div class="container">
+            <h2>Calendario Electoral 2025</h2>
+            <p class="descripcion-calendario">Todas las fechas clave del proceso electoral. Añade recordatorios a tu calendario personal.</p>
+            
+            <div class="filtros-calendario">
+                <button class="filtro-btn active" data-tipo="todas">Todas las Fechas</button>
+                <button class="filtro-btn" data-tipo="elecciones">Elecciones</button>
+                <button class="filtro-btn" data-tipo="debates">Debates</button>
+                <button class="filtro-btn" data-tipo="plazos">Plazos Legales</button>
+                <button class="filtro-btn" data-tipo="eventos">Eventos Importantes</button>
+            </div>
+
+            <div class="calendario-grid" id="calendario-grid">
+                <!-- Las fechas se cargan dinámicamente -->
+            </div>
+
+            <div class="acciones-calendario">
+                <button class="btn-principal" onclick="descargarCalendarioCompleto()">
+                    <i class="fas fa-download"></i> Descargar Calendario Completo (.ics)
+                </button>
+                <button class="btn-secundario" onclick="syncConGoogleCalendar()">
+                    <i class="fab fa-google"></i> Sincronizar con Google Calendar
+                </button>
+            </div>
+
+            <div class="info-calendario">
+                <h4><i class="fas fa-info-circle"></i> Información Importante</h4>
+                <ul>
+                    <li>Las fechas están sujetas a confirmación oficial por el SERVEL</li>
+                    <li>Los debates pueden sufrir modificaciones de última hora</li>
+                    <li>Recomendamos verificar fechas en <a href="https://www.servel.cl" target="_blank">servel.cl</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+<!-- Noticias -->
+<section id="noticias" class="section">
+    <div class="container">
+        <h2> Noticias Política y mucho más</h2>
+        
+        <div class="indicador-noticias">
+            <div class="punto-activo"></div>
+            <span>Noticias en tiempo real - NewsData.io</span>
+            <button class="btn-actualizar" onclick="actualizarNoticias()" title="Actualizar noticias">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+        
+        <!-- Búsqueda rápida de temas políticos -->
+        <div class="busqueda-rapida">
+            <h3>🔍 Temas Políticos Destacados</h3>
+            <div class="temas-grid">
+                <button class="btn-tema" onclick="buscarNoticiasPoliticas('elecciones')">
+                    <i class="fas fa-vote-yea"></i>
+                    <span>Elecciones 2025</span>
+                </button>
+                <button class="btn-tema" onclick="buscarNoticiasPoliticas('candidatos')">
+                    <i class="fas fa-users"></i>
+                    <span>Candidatos</span>
+                </button>
+                <button class="btn-tema" onclick="buscarNoticiasPoliticas('debates')">
+                    <i class="fas fa-comments"></i>
+                    <span>Debates</span>
+                </button>
+                <button class="btn-tema" onclick="buscarNoticiasPoliticas('encuestas')">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Encuestas</span>
+                </button>
+                <button class="btn-tema" onclick="buscarNoticiasPoliticas('servel')">
+                    <i class="fas fa-landmark"></i>
+                    <span>SERVEL</span>
+                </button>
+                <button class="btn-tema" onclick="buscarNoticiasPoliticas('campana')">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Campaña</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="noticias-grid" id="noticias-grid">
+            <!-- Las noticias se cargan dinámicamente desde NewsData.io -->
+        </div>
+        
+        <!-- Estadísticas de noticias -->
+        <div class="estadisticas-noticias">
+            <div class="estadistica-item">
+                <i class="fas fa-newspaper"></i>
+                <span id="contador-noticias">0</span>
+                <small>Noticias cargadas</small>
+            </div>
+            <div class="estadistica-item">
+                <i class="fas fa-clock"></i>
+                <span id="actualizacion-noticias">Ahora</span>
+                <small>Última actualización</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+    <!-- Navegación -->
+    <nav class="navbar">
+        <button class="nav-btn" onclick="mostrarSeccion('inicio')">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+        </button>
+        <button class="nav-btn" onclick="mostrarSeccion('candidatos')">
+            <i class="fas fa-users"></i>
+            <span>Candidatos</span>
+        </button>
+        <button class="nav-btn" onclick="mostrarSeccion('comparador')">
+            <i class="fas fa-balance-scale"></i>
+            <span>Comparar</span>
+        </button>
+        <button class="nav-btn" onclick="mostrarSeccion('simulador')">
+            <i class="fas fa-vote-yea"></i>
+            <span>Simulador</span>
+        </button>
+        <button class="nav-btn" onclick="mostrarSeccion('calendario')">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Calendario</span>
+        </button>
+        <button class="nav-btn" onclick="mostrarSeccion('noticias')">
+            <i class="fas fa-newspaper"></i>
+            <span>Noticias</span>
+        </button>
+    </nav>
+
+    <!-- Pie de página -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Voto Informado Chile 2025</h3>
+                    <p>Plataforma cívica independiente para elecciones presidenciales</p>
+                    <p class="footer-credits">Desarrollado por <strong>Andrés Romero M</strong></p>
+                    <p class="footer-license">Proyecto personal sin fines de lucro</p>
+                </div>
+                
+                <div class="footer-social">
+                    <h4>Sígueme en redes sociales</h4>
+                    <div class="social-links">
+                        <a href="https://github.com/AndesRo" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/romeromllq/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="https://x.com/andreew_ro" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                        <a href="https://www.instagram.com/andrewromn?igsh=aTcyODBnMmRycGo1" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                            <span>Instagram</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-legal">
+                    <h4>Información Legal</h4>
+                    <p>Los datos presentados son de carácter informativo y pueden contener aproximaciones.</p>
+                    <p>Consulta fuentes oficiales para información verificada.</p>
+                    <div class="footer-links">
+                        <a href="#privacidad" onclick="mostrarModalPrivacidad()">Política de Privacidad</a>
+                        <a href="#terminos" onclick="mostrarModalTerminos()">Términos de Uso</a>
+                        <a href="mailto:andespart.ar@gmail.com">Contacto</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Voto Informado Chile. Todos los derechos reservados.</p>
+                <p>Proyecto Cívico - Promoviendo la participación informada</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
