@@ -3,34 +3,88 @@ document.addEventListener('DOMContentLoaded', function() {
     cargarDatos();
     inicializarNavegacion();
     mostrarSeccion('inicio');
-    inicializarNoticias(); // Nueva inicialización de noticias
+    inicializarNoticias();
 });
 
-// =============================================
-// CONFIGURACIÓN NEWSData.io API
-// =============================================
+// ============================================
+// CONFIGURACIÓN DE RSS FEEDS DE MEDIOS CHILENOS
+// ============================================
 
-// REEMPLAZA CON TU API KEY DE NEWSDATA.IO
-const NEWSDATA_API_KEY = 'pub_14b0d908d67740fda95020e8a4dae784'; // ← Obtén en https://newsdata.io/
-
-// Configuración de la API
-const NEWSDATA_CONFIG = {
-    baseUrl: 'https://newsdata.io/api/1/news',
-    country: 'cl', // Chile
-    language: 'es', // Español
-    category: 'politics', // Categoría política
-    maxResults: 10 // Máximo de resultados
+const RSS_FEEDS_CHILE = {
+    'latercera': {
+        url: 'https://www.latercera.com/feed',
+        name: 'La Tercera',
+        category: 'general'
+    },
+    'emol': {
+        url: 'https://www.emol.com/rss/noticias.xml',
+        name: 'Emol',
+        category: 'general'
+    },
+    'cooperativa': {
+        url: 'https://www.cooperativa.cl/noticias/site/tax/port/all/rss____1.xml',
+        name: 'Cooperativa',
+        category: 'general'
+    },
+    'biobio': {
+        url: 'https://www.biobiochile.cl/rss',
+        name: 'BioBio Chile',
+        category: 'general'
+    },
+    't13': {
+        url: 'https://www.t13.cl/rss',
+        name: 'T13',
+        category: 'general'
+    },
+    'cnnchile': {
+        url: 'https://www.cnnchile.com/rss',
+        name: 'CNN Chile',
+        category: 'general'
+    },
+    'elmostrador': {
+        url: 'https://www.elmostrador.cl/feed/',
+        name: 'El Mostrador',
+        category: 'general'
+    },
+    'lasegunda': {
+        url: 'https://www.lasegunda.com/feed',
+        name: 'La Segunda',
+        category: 'general'
+    },
+    'pauta': {
+        url: 'https://www.pauta.cl/rss',
+        name: 'Pauta',
+        category: 'general'
+    },
+    'ex_ante': {
+        url: 'https://www.ex-ante.cl/feed/',
+        name: 'Ex-Ante',
+        category: 'política'
+    },
+    'ladiaria': {
+        url: 'https://www.ladiaria.com.uy/es/feed/',
+        name: 'La Diaria',
+        category: 'política'
+    }
 };
+
+// Servicios de proxy RSS gratuitos (alternativas)
+const RSS_PROXY_SERVICES = [
+    'https://api.rss2json.com/v1/api.json?rss_url=',
+    'https://rss-to-json-serverless-api.vercel.app/api?feedUrl=',
+    'https://thingproxy.freeboard.io/fetch/'
+];
 
 // Variables globales
 let candidatos = [];
 let noticiasReales = [];
 let graficoActual = null;
 let ultimaActualizacion = 0;
+let proxyIndex = 0;
 
-// =============================================
+// ============================================
 // CARGA DE DATOS PRINCIPAL
-// =============================================
+// ============================================
 
 // Carga de datos desde archivos JSON
 async function cargarDatos() {
@@ -45,107 +99,180 @@ async function cargarDatos() {
         inicializarSelectores();
 
         // Cargar noticias en tiempo real
-        await cargarNoticiasReales();
-
+        await cargarNoticiasChilenas();
         console.log('✅ Datos cargados exitosamente');
-
     } catch (error) {
         console.error('❌ Error al cargar datos:', error);
-        // Datos de fallback si no se pueden cargar los archivos
         cargarDatosFallback();
-        
-        // Intentar cargar noticias en tiempo real de todas formas
-        cargarNoticiasReales().catch(error => {
-            console.warn('No se pudieron cargar noticias en tiempo real:', error);
+        await cargarNoticiasChilenas().catch(error => {
+            console.warn('No se pudieron cargar noticias chilenas:', error);
         });
     }
 }
 
-// =============================================
-// FUNCIONES PRINCIPALES NEWSData.io
-// =============================================
+// ============================================
+// CARGA DE NOTICIAS CHILENAS
+// ============================================
 
-// Función principal para cargar noticias en tiempo real
-async function cargarNoticiasReales() {
+// Función principal para cargar noticias chilenas
+async function cargarNoticiasChilenas() {
     try {
         mostrarEstadoCargaNoticias();
         
-        // Construir URL para NewsData.io
-        const url = construirUrlNewsData();
-        console.log('📡 Solicitando noticias a:', url);
+        // Intentar cargar noticias de múltiples fuentes
+        const noticiasPromesas = [
+            cargarNoticiasRSS('latercera'),
+            cargarNoticiasRSS('emol'),
+            cargarNoticiasRSS('cooperativa'),
+            cargarNoticiasRSS('biobio'),
+            cargarNoticiasRSS('t13'),
+            cargarNoticiasRSS('elmostrador')
+        ];
+
+        // Esperar a que todas las promesas se resuelvan
+        const resultados = await Promise.allSettled(noticiasPromesas);
         
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        if (data.status === 'success' && data.results && data.results.length > 0) {
-            noticiasReales = data.results;
+        // Combinar todas las noticias exitosas
+        const todasNoticias = [];
+        resultados.forEach((resultado, index) => {
+            if (resultado.status === 'fulfilled' && resultado.value) {
+                todasNoticias.push(...resultado.value);
+                console.log(`✅ ${Object.keys(RSS_FEEDS_CHILE)[index]}: ${resultado.value.length} noticias`);
+            }
+        });
+
+        if (todasNoticias.length > 0) {
+            // Ordenar por fecha y eliminar duplicados
+            noticiasReales = filtrarYOrdenarNoticias(todasNoticias);
             ultimaActualizacion = Date.now();
-            console.log('✅ Noticias cargadas:', noticiasReales.length);
-            renderizarNoticiasReales();
+            console.log('📰 Noticias chilenas cargadas:', noticiasReales.length);
+            renderizarNoticiasChilenas();
             actualizarEstadisticasNoticias();
         } else {
-            throw new Error('No se encontraron noticias o error en la API');
+            throw new Error('No se pudieron cargar noticias de ninguna fuente');
         }
-        
     } catch (error) {
-        console.error('❌ Error al cargar noticias reales:', error);
-        mostrarErrorNoticias('Error: ' + error.message);
+        console.error('❌ Error al cargar noticias chilenas:', error);
+        await cargarNoticiasFallback();
     }
 }
 
-// Función para construir URL de NewsData.io
-function construirUrlNewsData(parametrosExtra = {}) {
-    const params = new URLSearchParams({
-        apikey: NEWSDATA_API_KEY,
-        country: NEWSDATA_CONFIG.country,
-        language: NEWSDATA_CONFIG.language,
-        category: NEWSDATA_CONFIG.category,
-        size: NEWSDATA_CONFIG.maxResults.toString(),
-        ...parametrosExtra
-    });
-    
-    return `${NEWSDATA_CONFIG.baseUrl}?${params.toString()}`;
+// Función para cargar noticias de un RSS específico
+async function cargarNoticiasRSS(fuenteKey) {
+    try {
+        const fuente = RSS_FEEDS_CHILE[fuenteKey];
+        if (!fuente) return [];
+
+        const proxyUrl = obtenerProxyUrl() + encodeURIComponent(fuente.url);
+        console.log(`📡 Cargando: ${fuente.name}`);
+        
+        const response = await fetch(proxyUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return procesarNoticiasRSS(data, fuente);
+    } catch (error) {
+        console.warn(`⚠️ No se pudo cargar ${fuenteKey}:`, error.message);
+        return [];
+    }
 }
 
-// Función para renderizar noticias de NewsData.io
-function renderizarNoticiasReales() {
+// Función para obtener URL del proxy (rotación entre servicios)
+function obtenerProxyUrl() {
+    proxyIndex = (proxyIndex + 1) % RSS_PROXY_SERVICES.length;
+    return RSS_PROXY_SERVICES[proxyIndex];
+}
+
+// Función para procesar noticias RSS
+function procesarNoticiasRSS(data, fuente) {
+    if (!data || !data.items || !Array.isArray(data.items)) {
+        throw new Error('Formato de datos inválido');
+    }
+
+    return data.items
+        .filter(item => item.title && item.link)
+        .map(item => ({
+            title: limpiarTexto(item.title),
+            description: limpiarTexto(item.description || ''),
+            link: item.link,
+            published_at: item.pubDate || item.published,
+            source: fuente.name,
+            image_url: obtenerImagenNoticia(item),
+            category: fuente.category,
+            fuente: fuente.name
+        }))
+        .slice(0, 5); // Limitar a 5 noticias por fuente
+}
+
+// Función para obtener imagen de la noticia
+function obtenerImagenNoticia(item) {
+    if (item.enclosure && item.enclosure.url) {
+        return item.enclosure.url;
+    }
+    if (item.thumbnail) {
+        return item.thumbnail;
+    }
+    // Extraer imagen del contenido HTML
+    const regex = /<img[^>]+src="([^">]+)"/;
+    const match = (item.content || item.description || '').match(regex);
+    return match ? match[1] : null;
+}
+
+// Función para filtrar y ordenar noticias
+function filtrarYOrdenarNoticias(noticias) {
+    // Eliminar duplicados por título
+    const uniqueNoticias = noticias.filter((noticia, index, self) =>
+        index === self.findIndex(n => 
+            n.title.toLowerCase() === noticia.title.toLowerCase()
+        )
+    );
+
+    // Ordenar por fecha (más recientes primero)
+    return uniqueNoticias.sort((a, b) => {
+        const fechaA = new Date(a.published_at || 0);
+        const fechaB = new Date(b.published_at || 0);
+        return fechaB - fechaA;
+    }).slice(0, 30); // Limitar a 30 noticias totales
+}
+
+// ============================================
+// RENDERIZADO DE NOTICIAS CHILENAS
+// ============================================
+
+function renderizarNoticiasChilenas() {
     const container = document.getElementById('noticias-grid');
-    
     if (!noticiasReales || noticiasReales.length === 0) {
         mostrarEstadoSinNoticias();
         return;
     }
 
     container.innerHTML = noticiasReales.map(noticia => `
-        <div class="noticia-card">
+        <div class="noticia-card" data-category="${noticia.category || 'general'}">
             <div class="noticia-imagen">
-                ${noticia.image_url ? 
-                    `<img src="${noticia.image_url}" alt="${noticia.title}" loading="lazy" 
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` : 
-                    ''
-                }
+                ${noticia.image_url ? `
+                    <img src="${noticia.image_url}" alt="${noticia.title}" 
+                         loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                ` : ''}
                 <div class="noticia-icono" style="${noticia.image_url ? 'display: none;' : ''}">
                     <i class="fas fa-newspaper"></i>
                 </div>
+                <div class="noticia-fuente-badge">${noticia.fuente || noticia.source}</div>
             </div>
             <div class="noticia-contenido">
                 <div class="noticia-header">
-                    <span class="noticia-fuente">${noticia.source_id || 'Medio Chileno'}</span>
-                    <span class="noticia-fecha">${formatearFechaNewsData(noticia.pubDate)}</span>
+                    <span class="noticia-fuente">${noticia.fuente || noticia.source}</span>
+                    <span class="noticia-fecha">${formatearFechaChilena(noticia.published_at)}</span>
                 </div>
-                <h3 class="noticia-titulo">${noticia.title || 'Título no disponible'}</h3>
-                <p class="noticia-descripcion">${noticia.description || 'Sin descripción disponible.'}</p>
+                <h3 class="noticia-titulo">${noticia.title}</h3>
+                <p class="noticia-descripcion">${noticia.description || 'Haz clic para leer más sobre esta noticia.'}</p>
                 <div class="noticia-acciones">
                     <a href="${noticia.link}" target="_blank" rel="noopener noreferrer" class="btn-noticia">
-                        <i class="fas fa-external-link-alt"></i> Leer más
+                        <i class="fas fa-external-link-alt"></i> Leer en ${noticia.fuente || noticia.source}
                     </a>
                     <button class="btn-noticia btn-compartir" 
-                            onclick="compartirNoticia('${noticia.link?.replace(/'/g, "\\'") || ''}', '${noticia.title?.replace(/'/g, "\\'") || ''}')">
+                            onclick="compartirNoticia('${noticia.link.replace(/'/g, "\\'")}', '${noticia.title.replace(/'/g, "\\'")}')">
                         <i class="fas fa-share"></i> Compartir
                     </button>
                 </div>
@@ -153,12 +280,17 @@ function renderizarNoticiasReales() {
         </div>
     `).join('');
 
-    // Añadir indicador de fuente en tiempo real
-    agregarIndicadorFuente('NewsData.io');
+    // Añadir filtros y estadísticas
+    agregarFiltrosNoticias();
+    actualizarContadorNoticias();
 }
 
-// Función para formatear fecha de NewsData.io
-function formatearFechaNewsData(fechaStr) {
+// ============================================
+// FUNCIONES AUXILIARES
+// ============================================
+
+// Función para formatear fecha en formato chileno
+function formatearFechaChilena(fechaStr) {
     if (!fechaStr) return 'Fecha no disponible';
     
     try {
@@ -168,7 +300,7 @@ function formatearFechaNewsData(fechaStr) {
         const minutos = Math.floor(diferencia / (1000 * 60));
         const horas = Math.floor(diferencia / (1000 * 60 * 60));
         const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-        
+
         if (minutos < 60) {
             return `Hace ${minutos} minuto${minutos !== 1 ? 's' : ''}`;
         } else if (horas < 24) {
@@ -178,7 +310,7 @@ function formatearFechaNewsData(fechaStr) {
         } else {
             return fecha.toLocaleDateString('es-CL', {
                 year: 'numeric',
-                month: 'short',
+                month: 'long',
                 day: 'numeric'
             });
         }
@@ -187,49 +319,75 @@ function formatearFechaNewsData(fechaStr) {
     }
 }
 
-// =============================================
-// FUNCIONES AUXILIARES MEJORADAS
-// =============================================
-
-// Función para mostrar estado de carga de noticias
-function mostrarEstadoCargaNoticias() {
-    const container = document.getElementById('noticias-grid');
-    container.innerHTML = `
-        <div class="cargando-noticias">
-            <i class="fas fa-sync-alt fa-spin"></i>
-            <p>Cargando noticias en tiempo real...</p>
-        </div>
-    `;
+// Función para limpiar texto HTML
+function limpiarTexto(texto) {
+    if (!texto) return '';
+    return texto
+        .replace(/<[^>]*>/g, '') // Eliminar HTML tags
+        .replace(/&[^;]+;/g, '') // Eliminar entidades HTML
+        .replace(/\s+/g, ' ') // Normalizar espacios
+        .trim()
+        .substring(0, 200); // Limitar longitud
 }
 
-// Función para mostrar estado sin noticias
-function mostrarEstadoSinNoticias() {
+// Función para agregar filtros de noticias
+function agregarFiltrosNoticias() {
     const container = document.getElementById('noticias-grid');
-    container.innerHTML = `
-        <div class="sin-noticias">
-            <i class="fas fa-newspaper"></i>
-            <h3>No hay noticias disponibles</h3>
-            <p>Intenta actualizar la página o verificar tu conexión</p>
-        </div>
-    `;
-}
-
-// Función para agregar indicador de fuente
-function agregarIndicadorFuente(fuente) {
-    const container = document.getElementById('noticias-grid');
-    let indicador = container.parentNode.querySelector('.fuente-datos');
+    const header = container.parentNode.querySelector('.section-header');
     
-    if (!indicador) {
-        indicador = document.createElement('div');
-        indicador.className = 'fuente-datos';
-        container.parentNode.insertBefore(indicador, container.nextSibling);
+    if (!header.querySelector('.filtros-noticias')) {
+        const filtrosHTML = `
+            <div class="filtros-noticias">
+                <button class="filtro-btn active" data-filtro="todas">
+                    <i class="fas fa-newspaper"></i> Todas
+                </button>
+                <button class="filtro-btn" data-filtro="política">
+                    <i class="fas fa-landmark"></i> Política
+                </button>
+                <button class="filtro-btn" data-filtro="general">
+                    <i class="fas fa-globe"></i> General
+                </button>
+                <div class="contador-noticias">
+                    <i class="fas fa-sync-alt"></i>
+                    <span id="contador-actual">${noticiasReales.length}</span> noticias
+                </div>
+            </div>
+        `;
+        header.insertAdjacentHTML('beforeend', filtrosHTML);
+        
+        // Añadir event listeners para los filtros
+        header.querySelectorAll('.filtro-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filtro = this.getAttribute('data-filtro');
+                aplicarFiltroNoticias(filtro);
+                
+                // Actualizar botones activos
+                header.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
     }
-    
-    indicador.innerHTML = `<i class="fas fa-wifi"></i> ${fuente}`;
 }
 
-// Función para actualizar estadísticas
-function actualizarEstadisticasNoticias() {
+// Función para aplicar filtro a noticias
+function aplicarFiltroNoticias(filtro) {
+    const noticias = document.querySelectorAll('.noticia-card');
+    
+    noticias.forEach(noticia => {
+        if (filtro === 'todas' || noticia.getAttribute('data-category') === filtro) {
+            noticia.style.display = 'block';
+        } else {
+            noticia.style.display = 'none';
+        }
+    });
+    
+    // Actualizar contador visible
+    const visibles = document.querySelectorAll('.noticia-card[style="display: block"]').length;
+    document.getElementById('contador-actual').textContent = visibles;
+}
+
+// Función para actualizar contador
+function actualizarContadorNoticias() {
     const contador = document.getElementById('contador-noticias');
     const actualizacion = document.getElementById('actualizacion-noticias');
     
@@ -246,163 +404,99 @@ function actualizarEstadisticasNoticias() {
     }
 }
 
-// Función para actualizar noticias manualmente
-function actualizarNoticias() {
-    const btnActualizar = document.querySelector('.btn-actualizar');
-    if (btnActualizar) {
-        btnActualizar.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i>';
-        btnActualizar.disabled = true;
-    }
-    
-    cargarNoticiasReales().finally(() => {
-        if (btnActualizar) {
-            btnActualizar.innerHTML = '<i class="fas fa-sync-alt"></i>';
-            btnActualizar.disabled = false;
+// ============================================
+// FALLBACKS Y MANEJO DE ERRORES
+// ============================================
+
+// Fallback para cuando fallan todos los RSS
+async function cargarNoticiasFallback() {
+    try {
+        console.log('🔄 Intentando cargar noticias de respaldo...');
+        
+        // Usar Google News RSS para Chile como último recurso
+        const googleNewsUrl = 'https://news.google.com/rss?hl=es-419&gl=CL&ceid=CL:es-419';
+        const proxyUrl = obtenerProxyUrl() + encodeURIComponent(googleNewsUrl);
+        
+        const response = await fetch(proxyUrl);
+        const data = await response.json();
+        
+        if (data.items && data.items.length > 0) {
+            noticiasReales = data.items.slice(0, 15).map(item => ({
+                title: limpiarTexto(item.title),
+                description: limpiarTexto(item.content || ''),
+                link: item.link,
+                published_at: item.pubDate,
+                source: 'Google News Chile',
+                image_url: null,
+                category: 'general',
+                fuente: 'Varios Medios'
+            }));
+            
+            ultimaActualizacion = Date.now();
+            console.log('✅ Noticias de respaldo cargadas:', noticiasReales.length);
+            renderizarNoticiasChilenas();
+            actualizarEstadisticasNoticias();
+        } else {
+            throw new Error('No se pudieron cargar noticias de respaldo');
         }
+    } catch (error) {
+        console.error('❌ Error en fallback:', error);
+        mostrarNoticiasEstaticas();
+    }
+}
+
+// Mostrar noticias estáticas como último recurso
+function mostrarNoticiasEstaticas() {
+    noticiasReales = [
+        {
+            title: "Elecciones Chile 2025: Conoce a los candidatos presidenciales",
+            description: "Sigue la cobertura especial de las elecciones presidenciales chilenas 2025.",
+            link: "#",
+            published_at: new Date().toISOString(),
+            source: "Voto Informado",
+            category: "política",
+            fuente: "Sistema"
+        },
+        {
+            title: "Análisis: Propuestas económicas de los candidatos",
+            description: "Comparativa de las principales medidas económicas propuestas por los candidatos.",
+            link: "#",
+            published_at: new Date().toISOString(),
+            source: "Voto Informado",
+            category: "política",
+            fuente: "Sistema"
+        }
+    ];
+    
+    renderizarNoticiasChilenas();
+    mostrarNotificacion('info', 'Mostrando noticias de respaldo. Las noticias en tiempo real estarán disponibles cuando se restablezca la conexión.');
+}
+
+// ============================================
+// FUNCIONES DE NAVEGACIÓN Y UI
+// ============================================
+
+function inicializarNavegacion() {
+    // Navegación móvil
+    const menuBtn = document.querySelector('.menu-btn');
+    const nav = document.querySelector('.nav');
+    
+    if (menuBtn) {
+        menuBtn.addEventListener('click', function() {
+            nav.classList.toggle('active');
+            this.classList.toggle('active');
+        });
+    }
+
+    // Cerrar menú al hacer clic en un enlace
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            nav.classList.remove('active');
+            menuBtn.classList.remove('active');
+        });
     });
 }
 
-// Función para manejo de errores mejorado
-function mostrarErrorNoticias(mensaje) {
-    const notificacion = document.createElement('div');
-    notificacion.className = 'notificacion notificacion-error';
-    notificacion.innerHTML = `
-        <div class="notificacion-contenido">
-            <i class="fas fa-exclamation-triangle"></i>
-            <div>
-                <strong>Error al cargar noticias</strong>
-                <div style="font-size: 0.9rem; margin-top: 5px;">${mensaje}</div>
-            </div>
-        </div>
-    `;
-
-    notificacion.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: var(--color-acento);
-        color: white;
-        padding: 15px 20px;
-        border-radius: var(--border-radius);
-        box-shadow: var(--sombra-hover);
-        z-index: 3000;
-        animation: slideInRight 0.3s ease;
-        max-width: 350px;
-    `;
-
-    document.body.appendChild(notificacion);
-
-    setTimeout(() => {
-        notificacion.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => {
-            if (notificacion.parentNode) {
-                notificacion.parentNode.removeChild(notificacion);
-            }
-        }, 300);
-    }, 5000);
-}
-
-// =============================================
-// BÚSQUEDA AVANZADA Y TEMAS POLÍTICOS
-// =============================================
-
-// Función para buscar noticias específicas con NewsData.io
-async function buscarNoticiasEspecificas(termino) {
-    try {
-        const url = construirUrlNewsData({ q: termino });
-        console.log('🔍 Buscando:', url);
-        
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-            throw new Error('Error en la búsqueda');
-        }
-        
-        const data = await response.json();
-        
-        if (data.status === 'success' && data.results && data.results.length > 0) {
-            mostrarResultadosBusqueda(data.results, termino);
-        } else {
-            mostrarNotificacion('info', `No se encontraron noticias sobre "${termino}"`);
-        }
-        
-    } catch (error) {
-        console.error('Error en búsqueda:', error);
-        mostrarNotificacion('error', 'Error al buscar noticias. Verifica tu API key.');
-    }
-}
-
-// Función para búsqueda avanzada por temas políticos
-async function buscarNoticiasPoliticas(termino) {
-    const terminosPoliticos = {
-        'elecciones': 'elecciones presidenciales Chile 2025',
-        'candidatos': 'candidatos presidenciales Chile',
-        'debates': 'debates presidenciales Chile',
-        'encuestas': 'encuestas electorales Chile',
-        'servel': 'SERVEL elecciones',
-        'votacion': 'votación elecciones Chile',
-        'campana': 'campaña electoral Chile',
-        'primarias': 'primarias presidenciales Chile'
-    };
-    
-    const query = terminosPoliticos[termino] || termino;
-    await buscarNoticiasEspecificas(query);
-}
-
-// Función para mostrar resultados de búsqueda
-function mostrarResultadosBusqueda(articulos, termino) {
-    const modalHTML = `
-        <div class="modal-overlay" onclick="cerrarModal()">
-            <div class="modal-busqueda" onclick="event.stopPropagation()">
-                <h3>📰 Resultados: ${termino}</h3>
-                <div class="resultados-busqueda">
-                    ${articulos.map(articulo => `
-                        <div class="resultado-item">
-                            <div class="resultado-header">
-                                <span class="resultado-fuente">${articulo.source_id || 'Fuente desconocida'}</span>
-                                <span class="resultado-fecha">${formatearFechaNewsData(articulo.pubDate)}</span>
-                            </div>
-                            <h4>${articulo.title || 'Sin título'}</h4>
-                            <p>${articulo.description || 'Sin descripción disponible.'}</p>
-                            <div class="resultado-acciones">
-                                <a href="${articulo.link}" target="_blank" class="btn-noticia">
-                                    <i class="fas fa-external-link-alt"></i> Leer noticia completa
-                                </a>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-                <button class="btn-cerrar" onclick="cerrarModal()">
-                    <i class="fas fa-times"></i> Cerrar
-                </button>
-            </div>
-        </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-}
-
-// =============================================
-// INICIALIZACIÓN Y CONFIGURACIÓN
-// =============================================
-
-// Inicialización mejorada de noticias
-function inicializarNoticias() {
-    // Cargar noticias inmediatamente
-    cargarNoticiasReales();
-    
-    // Actualizar cada 5 minutos (300,000 ms)
-    setInterval(() => {
-        if (document.getElementById('noticias').classList.contains('active')) {
-            cargarNoticiasReales();
-        }
-    }, 300000);
-    
-    // Actualizar estadísticas iniciales
-    setTimeout(actualizarEstadisticasNoticias, 1000);
-}
-
-// Modificar la función mostrarSeccion para noticias
 function mostrarSeccion(seccion) {
     // Ocultar todas las secciones
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -416,76 +510,193 @@ function mostrarSeccion(seccion) {
     
     // Scroll al inicio
     window.scrollTo(0, 0);
-
-    // Inicializar secciones específicas
+    
+    // Cargar noticias reales si es la sección de noticias
+    if (seccion === 'noticias' && (noticiasReales.length === 0 || Date.now() - ultimaActualizacion > 900000)) {
+        cargarNoticiasChilenas().catch(error => {
+            console.warn('No se pudieron cargar noticias en tiempo real al cambiar de sección:', error);
+        });
+    }
+    
+    // Inicializar otras secciones específicas
     if (seccion === 'simulador') {
         inicializarSimulador();
     } else if (seccion === 'calendario') {
         inicializarCalendario();
-    } else if (seccion === 'medios') {
-        mostrarMediosChilenos();
-        inicializarFiltrosMedios();
-    } else if (seccion === 'noticias') {
-        // Forzar actualización si no hay noticias recientes
-        if (noticiasReales.length === 0 || Date.now() - ultimaActualizacion > 300000) {
-            cargarNoticiasReales();
-        }
-        actualizarEstadisticasNoticias();
     }
 }
 
-// =============================================
-// FUNCIONES DE FALLBACK (SIN NOTICIAS LOCALES)
-// =============================================
+// ============================================
+// RENDERIZADO DE CANDIDATOS
+// ============================================
 
-// Datos de fallback solo para candidatos
-function cargarDatosFallback() {
-    console.log('📂 Cargando datos de fallback...');
-    
-    // Solo cargamos candidatos de fallback
-    candidatos = [
-        {
-            id: 'jara',
-            nombre: 'Jeannette Alejandra Jara Román',
-            partido: 'Partido Comunista / Unidad por Chile',
-            edad: 51,
-            profesion: 'Abogada y Administradora Pública',
-            foto: 'images/jara.jpg',
-            lema: 'Un Chile que cumple',
-            aprobacion: 26,
-            propuestas: [
-                'Aumento del salario mínimo de $529.000 a $750.000',
-                'Eliminación de las AFP y reforma del sistema previsional',
-                'Sala cuna universal para aumentar participación laboral femenina'
-            ]
-        },
-        {
-            id: 'kast',
-            nombre: 'José Antonio Kast Rist',
-            partido: 'Partido Republicano / Cambio por Chile',
-            edad: 59,
-            profesion: 'Abogado',
-            foto: 'images/kast.jpg',
-            lema: 'Chile Orden y Libertad',
-            aprobacion: 24,
-            propuestas: [
-                'Fortalecimiento del orden público y seguridad ciudadana',
-                'Defensa de la propiedad privada y libre mercado',
-                'Control fronterizo y políticas anti-inmigración irregular'
-            ]
-        }
-        // ... agregar más candidatos si es necesario
-    ];
+function renderizarCandidatos() {
+    const container = document.getElementById('candidatos-grid');
+    if (!container) return;
 
-    renderizarCandidatos();
-    inicializarSelectores();
+    container.innerHTML = candidatos.map(candidato => `
+        <div class="candidato-card" data-id="${candidato.id}">
+            <div class="candidato-header">
+                <div class="candidato-foto">
+                    <img src="${candidato.foto}" alt="${candidato.nombre}" 
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2YzZjRmNiIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM5OTk5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TaW4gSW1hZ2VuPC90ZXh0Pjwvc3ZnPg=='">
+                </div>
+                <div class="candidato-info">
+                    <h3 class="candidato-nombre">${candidato.nombre}</h3>
+                    <p class="candidato-partido">${candidato.partido}</p>
+                    <p class="candidato-edad">${candidato.edad} años • ${candidato.profesion}</p>
+                </div>
+            </div>
+            <div class="candidato-body">
+                <div class="candidato-lema">
+                    <i class="fas fa-quote-left"></i>
+                    ${candidato.lema}
+                </div>
+                <div class="candidato-aprobacion">
+                    <div class="aprobacion-bar">
+                        <div class="aprobacion-fill" style="width: ${candidato.aprobacion}%"></div>
+                    </div>
+                    <span class="aprobacion-texto">${candidato.aprobacion}% aprobación</span>
+                </div>
+                <div class="candidato-propuestas">
+                    <h4>Principales Propuestas:</h4>
+                    <ul>
+                        ${candidato.propuestas.map(propuesta => `<li>${propuesta}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+            <div class="candidato-actions">
+                <button class="btn btn-secondary" onclick="verDetallesCandidato('${candidato.id}')">
+                    <i class="fas fa-search"></i> Ver Detalles
+                </button>
+                <button class="btn btn-primary" onclick="simularVoto('${candidato.id}')">
+                    <i class="fas fa-vote-yea"></i> Simular Voto
+                </button>
+            </div>
+        </div>
+    `).join('');
 }
 
-// =============================================
-// FUNCIONES COMPARTIR Y MODALES
-// =============================================
+function inicializarSelectores() {
+    // Inicializar selectores de filtros si existen
+    const filtroPartido = document.getElementById('filtro-partido');
+    const filtroEdad = document.getElementById('filtro-edad');
+    
+    if (filtroPartido) {
+        filtroPartido.addEventListener('change', filtrarCandidatos);
+    }
+    if (filtroEdad) {
+        filtroEdad.addEventListener('change', filtrarCandidatos);
+    }
+}
 
-// Función para compartir noticias
+function filtrarCandidatos() {
+    const filtroPartido = document.getElementById('filtro-partido')?.value;
+    const filtroEdad = document.getElementById('filtro-edad')?.value;
+    
+    const candidatosFiltrados = candidatos.filter(candidato => {
+        let cumplePartido = true;
+        let cumpleEdad = true;
+        
+        if (filtroPartido && filtroPartido !== 'todos') {
+            cumplePartido = candidato.partido.toLowerCase().includes(filtroPartido.toLowerCase());
+        }
+        
+        if (filtroEdad && filtroEdad !== 'todos') {
+            switch(filtroEdad) {
+                case 'joven': cumpleEdad = candidato.edad < 45; break;
+                case 'adulto': cumpleEdad = candidato.edad >= 45 && candidato.edad < 65; break;
+                case 'mayor': cumpleEdad = candidato.edad >= 65; break;
+            }
+        }
+        
+        return cumplePartido && cumpleEdad;
+    });
+    
+    // Re-renderizar candidatos filtrados
+    const container = document.getElementById('candidatos-grid');
+    container.innerHTML = candidatosFiltrados.map(candidato => `
+        <div class="candidato-card" data-id="${candidato.id}">
+            <div class="candidato-header">
+                <div class="candidato-foto">
+                    <img src="${candidato.foto}" alt="${candidato.nombre}">
+                </div>
+                <div class="candidato-info">
+                    <h3 class="candidato-nombre">${candidato.nombre}</h3>
+                    <p class="candidato-partido">${candidato.partido}</p>
+                    <p class="candidato-edad">${candidato.edad} años • ${candidato.profesion}</p>
+                </div>
+            </div>
+            <div class="candidato-body">
+                <div class="candidato-lema">
+                    <i class="fas fa-quote-left"></i>
+                    ${candidato.lema}
+                </div>
+                <div class="candidato-aprobacion">
+                    <div class="aprobacion-bar">
+                        <div class="aprobacion-fill" style="width: ${candidato.aprobacion}%"></div>
+                    </div>
+                    <span class="aprobacion-texto">${candidato.aprobacion}% aprobación</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============================================
+// FUNCIONES DE UTILIDAD
+// ============================================
+
+function verDetallesCandidato(id) {
+    const candidato = candidatos.find(c => c.id === id);
+    if (!candidato) return;
+
+    const modalHTML = `
+        <div class="modal-overlay" onclick="cerrarModal()">
+            <div class="modal modal-candidato" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>${candidato.nombre}</h2>
+                    <button class="btn-cerrar" onclick="cerrarModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="candidato-detalle">
+                        <div class="detalle-foto">
+                            <img src="${candidato.foto}" alt="${candidato.nombre}">
+                        </div>
+                        <div class="detalle-info">
+                            <p><strong>Partido:</strong> ${candidato.partido}</p>
+                            <p><strong>Edad:</strong> ${candidato.edad} años</p>
+                            <p><strong>Profesión:</strong> ${candidato.profesion}</p>
+                            <p><strong>Lema:</strong> "${candidato.lema}"</p>
+                        </div>
+                    </div>
+                    <div class="detalle-propuestas">
+                        <h3>Propuestas Principales</h3>
+                        <ul>
+                            ${candidato.propuestas.map(propuesta => `<li>${propuesta}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+function simularVoto(id) {
+    const candidato = candidatos.find(c => c.id === id);
+    if (!candidato) return;
+
+    // Simular aumento temporal en aprobación
+    const votoActual = localStorage.getItem(`voto_${id}`) || 0;
+    localStorage.setItem(`voto_${id}`, parseInt(votoActual) + 1);
+    
+    mostrarNotificacion('success', `¡Voto simulado para ${candidato.nombre}!`);
+}
+
 function compartirNoticia(url, titulo) {
     if (!url || !titulo) {
         mostrarNotificacion('error', 'No se puede compartir esta noticia');
@@ -493,7 +704,6 @@ function compartirNoticia(url, titulo) {
     }
 
     const texto = `Mira esta noticia: ${titulo}`;
-    
     const opciones = [
         {
             nombre: 'WhatsApp',
@@ -533,11 +743,10 @@ function compartirNoticia(url, titulo) {
             </div>
         </div>
     `;
-
+    
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
-// Función para cerrar modales
 function cerrarModal() {
     const modal = document.querySelector('.modal-overlay');
     if (modal) {
@@ -545,33 +754,26 @@ function cerrarModal() {
     }
 }
 
-// Función de notificación
 function mostrarNotificacion(tipo, mensaje) {
     const notificacion = document.createElement('div');
     notificacion.className = `notificacion notificacion-${tipo}`;
     notificacion.innerHTML = `
         <div class="notificacion-contenido">
-            <i class="fas fa-${tipo === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+            <i class="fas fa-${tipo === 'success' ? 'check-circle' : tipo === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
             <span>${mensaje}</span>
         </div>
     `;
-
+    
     notificacion.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${tipo === 'success' ? 'var(--color-exito)' : 'var(--color-acento)'};
-        color: white;
-        padding: 15px 20px;
-        border-radius: var(--border-radius);
-        box-shadow: var(--sombra-hover);
-        z-index: 3000;
-        animation: slideInRight 0.3s ease;
-        max-width: 300px;
+        position: fixed; top: 20px; right: 20px;
+        background: ${tipo === 'success' ? '#10b981' : tipo === 'error' ? '#ef4444' : '#3b82f6'};
+        color: white; padding: 15px 20px; border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 3000;
+        animation: slideInRight 0.3s ease; max-width: 300px;
     `;
-
+    
     document.body.appendChild(notificacion);
-
+    
     setTimeout(() => {
         notificacion.style.animation = 'slideOutRight 0.3s ease';
         setTimeout(() => {
@@ -582,77 +784,84 @@ function mostrarNotificacion(tipo, mensaje) {
     }, 4000);
 }
 
-console.log('🚀 Aplicación Voto Informado Chile 2025 inicializada con NewsData.io');
+// ============================================
+// INICIALIZACIÓN Y CONFIGURACIÓN
+// ============================================
 
-
-
-
-// Modificar la función mostrarSeccion para cargar noticias reales cuando se active la sección
-function mostrarSeccion(seccion) {
-    // Ocultar todas las secciones
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+function inicializarNoticias() {
+    // Cargar noticias inmediatamente
+    cargarNoticiasChilenas();
     
-    // Mostrar la sección solicitada
-    document.getElementById(seccion).classList.add('active');
+    // Actualizar cada 15 minutos (900,000 ms)
+    setInterval(() => {
+        if (document.getElementById('noticias').classList.contains('active')) {
+            cargarNoticiasChilenas();
+        }
+    }, 900000);
     
-    // Actualizar navegación
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelector(`[onclick="mostrarSeccion('${seccion}')"]`)?.classList.add('active');
-    
-    // Scroll al inicio
-    window.scrollTo(0, 0);
+    // Actualizar estadísticas iniciales
+    setTimeout(actualizarEstadisticasNoticias, 1000);
+}
 
-    // Cargar noticias reales si es la sección de noticias y no se han cargado aún
-    if (seccion === 'noticias' && noticiasReales.length === 0) {
-        cargarNoticiasReales().catch(error => {
-            console.warn('No se pudieron cargar noticias en tiempo real al cambiar de sección:', error);
+// Función para mostrar estado de carga
+function mostrarEstadoCargaNoticias() {
+    const container = document.getElementById('noticias-grid');
+    container.innerHTML = `
+        <div class="cargando-noticias">
+            <i class="fas fa-sync-alt fa-spin"></i>
+            <p>Cargando noticias chilenas en tiempo real...</p>
+            <small>Conectando con medios nacionales</small>
+        </div>
+    `;
+}
+
+// Función para mostrar estado sin noticias
+function mostrarEstadoSinNoticias() {
+    const container = document.getElementById('noticias-grid');
+    container.innerHTML = `
+        <div class="sin-noticias">
+            <i class="fas fa-newspaper"></i>
+            <h3>No hay noticias disponibles en este momento</h3>
+            <p>Estamos teniendo dificultades para cargar las noticias. Intenta actualizar la página.</p>
+            <button class="btn-actualizar" onclick="cargarNoticiasChilenas()">
+                <i class="fas fa-sync-alt"></i> Reintentar
+            </button>
+        </div>
+    `;
+}
+
+function inicializarSimulador() {
+    console.log('Inicializando simulador...');
+    // Implementación del simulador
+}
+
+function inicializarCalendario() {
+    console.log('Inicializando calendario...');
+    // Implementación del calendario
+}
+
+function actualizarEstadisticasNoticias() {
+    const contador = document.getElementById('contador-noticias');
+    const actualizacion = document.getElementById('actualizacion-noticias');
+    
+    if (contador) {
+        contador.textContent = noticiasReales.length;
+    }
+    
+    if (actualizacion) {
+        const ahora = new Date();
+        actualizacion.textContent = ahora.toLocaleTimeString('es-CL', {
+            hour: '2-digit',
+            minute: '2-digit'
         });
     }
-    
-    // Inicializar otras secciones específicas
-    if (seccion === 'simulador') {
-        inicializarSimulador();
-    } else if (seccion === 'calendario') {
-        inicializarCalendario();
-    }
 }
 
-// Función de notificación mejorada
-function mostrarNotificacion(tipo, mensaje) {
-    const notificacion = document.createElement('div');
-    notificacion.className = `notificacion notificacion-${tipo}`;
-    notificacion.innerHTML = `
-        <div class="notificacion-contenido">
-            <i class="fas fa-${tipo === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-            <span>${mensaje}</span>
-        </div>
-    `;
+// ============================================
+// INICIALIZACIÓN FINAL
+// ============================================
 
-    notificacion.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${tipo === 'success' ? 'var(--color-exito)' : 'var(--color-acento)'};
-        color: white;
-        padding: 15px 20px;
-        border-radius: var(--border-radius);
-        box-shadow: var(--sombra-hover);
-        z-index: 3000;
-        animation: slideInRight 0.3s ease;
-        max-width: 300px;
-    `;
-
-    document.body.appendChild(notificacion);
-
-    setTimeout(() => {
-        notificacion.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => {
-            if (notificacion.parentNode) {
-                notificacion.parentNode.removeChild(notificacion);
-            }
-        }, 300);
-    }, 4000);
-}
+console.log('🚀 Aplicación Voto Informado Chile 2025 - Noticias chilenas en tiempo real inicializada');
 
 // Datos de fallback
 function cargarDatosFallback() {
@@ -3334,4 +3543,87 @@ function actualizarComparacion() {
 
         crearGraficoComparacion(candidato1, candidato2);
     }, 500); // Pequeño delay para mejor UX
+}
+
+/* ============================================================
+
+let afirmaciones = [];
+
+/* 🔹 Cargar afirmaciones desde afirmaciones.json */
+async function cargarAfirmaciones(filtro = "todos") {
+  const grid = document.getElementById("verificador-grid");
+  if (!grid) return; // Evita errores si la sección no está en pantalla
+  grid.innerHTML = "<p class='cargando'>Cargando verificaciones...</p>";
+
+  try {
+    const response = await fetch("afirmaciones.json");
+    afirmaciones = await response.json();
+
+    const filtradas =
+      filtro === "todos"
+        ? afirmaciones
+        : afirmaciones.filter(a => a.veredicto === filtro);
+
+    grid.innerHTML = "";
+
+    if (filtradas.length === 0) {
+      grid.innerHTML = "<p>No se encontraron afirmaciones para este filtro.</p>";
+      return;
+    }
+
+    filtradas.forEach(a => {
+      const card = document.createElement("div");
+      card.classList.add("card-afirmacion", a.veredicto);
+      card.innerHTML = `
+        <p class="texto-afirmacion">"${a.texto}"</p>
+        <p class="candidato">🗣️ ${a.candidato}</p>
+        <p class="veredicto">
+          ${
+            a.veredicto === "verdadero"
+              ? "✅ Verdadero"
+              : a.veredicto === "falso"
+              ? "❌ Falso"
+              : "⚠️ Dudoso"
+          }
+        </p>
+        <a href="${a.enlace}" target="_blank" class="fuente">Fuente: ${a.fuente}</a>
+      `;
+      grid.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Error cargando afirmaciones:", error);
+    grid.innerHTML = "<p style='color:red;'>Error al cargar las verificaciones.</p>";
+  }
+}
+
+/* 🔹 Inicializar los filtros al cargar la página */
+document.addEventListener("DOMContentLoaded", () => {
+  const botones = document.querySelectorAll(".filtro-btn");
+  botones.forEach(btn => {
+    btn.addEventListener("click", () => {
+      botones.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      cargarAfirmaciones(btn.dataset.filtro);
+    });
+  });
+
+  // Cargar todas las afirmaciones por defecto
+  cargarAfirmaciones();
+});
+
+/* ============================================================
+   📨 Modal de Reporte Ciudadano
+   ============================================================ */
+function abrirFormularioReporte() {
+  document.getElementById("modal-reporte").style.display = "flex";
+}
+
+function cerrarFormularioReporte() {
+  document.getElementById("modal-reporte").style.display = "none";
+}
+
+function enviarReporte(e) {
+  e.preventDefault();
+  alert("✅ Gracias por tu aporte. Revisaremos tu reporte pronto.");
+  cerrarFormularioReporte();
 }

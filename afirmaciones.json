@@ -1,0 +1,44 @@
+[
+  {
+    "texto": "El 60% del presupuesto en salud se destina a infraestructura privada.",
+    "candidato": "Evelyn Matthei",
+    "veredicto": "falso",
+    "fuente": "CIPER Chile",
+    "enlace": "https://www.ciperchile.cl"
+  },
+  {
+    "texto": "Chile emite menos del 0.3% de los gases de efecto invernadero globales.",
+    "candidato": "José Antonio Kast",
+    "veredicto": "verdadero",
+    "fuente": "Ministerio del Medio Ambiente",
+    "enlace": "https://mma.gob.cl"
+  },
+  {
+    "texto": "Las pensiones subirán automáticamente con el crecimiento del PIB.",
+    "candidato": "Franco Parisi",
+    "veredicto": "dudoso",
+    "fuente": "Fast Check CL",
+    "enlace": "https://www.fastcheck.cl"
+  },
+  {
+    "texto": "El 70% de los jóvenes entre 18 y 25 años no votó en las últimas elecciones municipales.",
+    "candidato": "Jeannette Jara",
+    "veredicto": "verdadero",
+    "fuente": "SERVEL",
+    "enlace": "https://www.servel.cl"
+  },
+  {
+    "texto": "Chile gasta más del 5% de su PIB en defensa nacional.",
+    "candidato": "Johannes Kaiser",
+    "veredicto": "falso",
+    "fuente": "Ministerio de Defensa Nacional",
+    "enlace": "https://www.defensa.cl"
+  },
+  {
+    "texto": "Las remesas desde el extranjero aumentaron un 40% entre 2020 y 2024.",
+    "candidato": "José Antonio Kast",
+    "veredicto": "dudoso",
+    "fuente": "Banco Central de Chile",
+    "enlace": "https://www.bcentral.cl"
+  }
+]

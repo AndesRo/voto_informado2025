@@ -25,7 +25,7 @@
 
 <!-- Favicon y Apple Touch Icons -->
 <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/web-app-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon/web-app-512x512.png">
 <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon.ico">
 <link rel="manifest" href="manifest.json">
 <link rel="mask-icon" href="images/favicon/web-app-512x512.png" color="#1e3a8a">
@@ -249,99 +249,99 @@
         </div>
     </section>
 
-<!-- Noticias -->
-<section id="noticias" class="section">
-    <div class="container">
-        <h2> Noticias relevantes</h2>
-        
-        <div class="indicador-noticias">
-            <div class="punto-activo"></div>
-            <span>Noticias en tiempo real - NewsData.io</span>
-            <button class="btn-actualizar" onclick="actualizarNoticias()" title="Actualizar noticias">
-                <i class="fas fa-sync-alt"></i>
-            </button>
-        </div>
-        
-        <!-- Búsqueda rápida de temas políticos -->
-        <div class="busqueda-rapida">
-            <h3>🔍 Temas Políticos Destacados</h3>
-            <div class="temas-grid">
-                <button class="btn-tema" onclick="buscarNoticiasPoliticas('elecciones')">
-                    <i class="fas fa-vote-yea"></i>
-                    <span>Elecciones 2025</span>
-                </button>
-                <button class="btn-tema" onclick="buscarNoticiasPoliticas('candidatos')">
-                    <i class="fas fa-users"></i>
-                    <span>Candidatos</span>
-                </button>
-                <button class="btn-tema" onclick="buscarNoticiasPoliticas('debates')">
-                    <i class="fas fa-comments"></i>
-                    <span>Debates</span>
-                </button>
-                <button class="btn-tema" onclick="buscarNoticiasPoliticas('encuestas')">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Encuestas</span>
-                </button>
-                <button class="btn-tema" onclick="buscarNoticiasPoliticas('servel')">
-                    <i class="fas fa-landmark"></i>
-                    <span>SERVEL</span>
-                </button>
-                <button class="btn-tema" onclick="buscarNoticiasPoliticas('campana')">
-                    <i class="fas fa-bullhorn"></i>
-                    <span>Campaña</span>
-                </button>
-            </div>
-        </div>
-        
-        <div class="noticias-grid" id="noticias-grid">
-            <!-- Las noticias se cargan dinámicamente desde NewsData.io -->
-        </div>
-        
-        <!-- Estadísticas de noticias -->
-        <div class="estadisticas-noticias">
-            <div class="estadistica-item">
-                <i class="fas fa-newspaper"></i>
-                <span id="contador-noticias">0</span>
-                <small>Noticias cargadas</small>
-            </div>
-            <div class="estadistica-item">
-                <i class="fas fa-clock"></i>
-                <span id="actualizacion-noticias">Ahora</span>
-                <small>Última actualización</small>
-            </div>
-        </div>
+<!-- Verificador de Datos -->
+<section id="verificador" class="section">
+  <div class="container">
+    <h2>Verificador de Datos Electorales</h2>
+    <p class="descripcion-verificador">
+      Revisa afirmaciones realizadas durante la campaña presidencial y conoce su nivel de veracidad según fuentes verificadas.
+    </p>
+
+    <div class="verificador-filtros">
+      <button class="filtro-btn active" data-filtro="todos">Todas</button>
+      <button class="filtro-btn" data-filtro="verdadero">✅ Verdadero</button>
+      <button class="filtro-btn" data-filtro="falso">❌ Falso</button>
+      <button class="filtro-btn" data-filtro="dudoso">⚠️ Dudoso</button>
     </div>
+
+    <div class="verificador-grid" id="verificador-grid">
+      <!-- Las afirmaciones se cargan dinámicamente -->
+    </div>
+
+    <div class="acciones-verificador">
+      <button class="btn-principal" onclick="abrirFormularioReporte()">
+        <i class="fas fa-flag"></i> Reportar Afirmación Dudosa
+      </button>
+    </div>
+
+    <div class="fuentes-verificacion">
+      <h4>Fuentes de Verificación</h4>
+      <ul>
+        <li><a href="https://www.servel.cl" target="_blank">SERVEL</a></li>
+        <li><a href="https://www.ciperchile.cl" target="_blank">CIPER Chile</a></li>
+        <li><a href="https://www.fastcheck.cl" target="_blank">Fast Check CL</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Modal de reporte -->
+  <div id="modal-reporte" class="modal-reporte">
+    <div class="modal-contenido">
+      <span class="cerrar-modal" onclick="cerrarFormularioReporte()">&times;</span>
+      <h3>Reportar Afirmación Dudosa</h3>
+      <form id="form-reporte" onsubmit="enviarReporte(event)">
+        <label>Texto de la afirmación</label>
+        <textarea required></textarea>
+
+        <label>Motivo del reporte</label>
+        <select required>
+          <option value="">Selecciona una opción</option>
+          <option>Información engañosa</option>
+          <option>Falta de fuente</option>
+          <option>Contexto incorrecto</option>
+          <option>Otro</option>
+        </select>
+
+        <label>Tu correo (opcional)</label>
+        <input type="email" placeholder="ejemplo@correo.cl">
+
+        <button type="submit" class="btn-principal">Enviar Reporte</button>
+      </form>
+    </div>
+  </div>
 </section>
 
 
 
-    <!-- Navegación -->
-    <nav class="navbar">
-        <button class="nav-btn" onclick="mostrarSeccion('inicio')">
-            <i class="fas fa-home"></i>
-            <span>Inicio</span>
-        </button>
-        <button class="nav-btn" onclick="mostrarSeccion('candidatos')">
-            <i class="fas fa-users"></i>
-            <span>Candidatos</span>
-        </button>
-        <button class="nav-btn" onclick="mostrarSeccion('comparador')">
-            <i class="fas fa-balance-scale"></i>
-            <span>Comparar</span>
-        </button>
-        <button class="nav-btn" onclick="mostrarSeccion('simulador')">
-            <i class="fas fa-vote-yea"></i>
-            <span>Simulador</span>
-        </button>
-        <button class="nav-btn" onclick="mostrarSeccion('calendario')">
-            <i class="fas fa-calendar-alt"></i>
-            <span>Calendario</span>
-        </button>
-        <button class="nav-btn" onclick="mostrarSeccion('noticias')">
-            <i class="fas fa-newspaper"></i>
-            <span>Noticias</span>
-        </button>
-    </nav>
+
+<!-- Navegación -->
+<nav class="navbar">
+    <button class="nav-btn" onclick="mostrarSeccion('inicio')">
+        <i class="fas fa-home"></i>
+        <span>Inicio</span>
+    </button>
+    <button class="nav-btn" onclick="mostrarSeccion('candidatos')">
+        <i class="fas fa-users"></i>
+        <span>Candidatos</span>
+    </button>
+    <button class="nav-btn" onclick="mostrarSeccion('comparador')">
+        <i class="fas fa-balance-scale"></i>
+        <span>Comparar</span>
+    </button>
+    <button class="nav-btn" onclick="mostrarSeccion('simulador')">
+        <i class="fas fa-vote-yea"></i>
+        <span>Simulador</span>
+    </button>
+    <button class="nav-btn" onclick="mostrarSeccion('calendario')">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Calendario</span>
+    </button>
+    <button class="nav-btn" onclick="mostrarSeccion('verificador')">
+        <i class="fas fa-search"></i>
+        <span>Verificador</span>
+    </button>
+</nav>
+
 
     <!-- Pie de página -->
     <footer class="footer">
@@ -369,6 +369,10 @@
                             <i class="fab fa-twitter"></i>
                             <span>Twitter</span>
                         </a>
+                        <a href="https://www.instagram.com/andrewromn?igsh=aTcyODBnMmRycGo1" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                            <span>Instagram</span>
+                        </a>
                     </div>
                 </div>
                 
@@ -393,6 +397,4 @@
 
     <script src="script.js"></script>
 </body>
-
 </html>
-
