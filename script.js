@@ -1149,7 +1149,107 @@ function cargarDatosFallback() {
                     fuente: 'BBC'
                 }
             ]
-        }
+        },
+        {
+  "id": "mayne-nicholls",
+  "nombre": "Harold Alfred Mayne-Nicholls Sécul",
+  "partido": "Independiente",
+  "edad": 64,
+  "profesion": "Periodista y Dirigente Deportivo",
+  "region": "Región de Antofagasta",
+  "religion": "Cristiana",
+  "estado_civil": "Casado",
+  "foto": "images/harold.jpg",
+  "lema": "Devolverle el alma a Chile",
+  "biografia": "Periodista titulado de la Pontificia Universidad Católica de Chile y dirigente deportivo. Fue presidente de la ANFP (2007-2011), donde contrató a Marcelo Bielsa y clasificó a Chile al Mundial de Sudáfrica 2010. Trabajó en la FIFA durante casi dos décadas. Director ejecutivo de los Juegos Panamericanos Santiago 2023. Se presenta como candidato independiente centrado en la unidad nacional.",
+  "experiencia_politica": "3 años como precandidato presidencial",
+  "cargos_previos": [
+    "Presidente de la ANFP (2007-2011)",
+    "Funcionario FIFA (1994-2012)",
+    "Director ejecutivo Juegos Panamericanos Santiago 2023",
+    "Fundador Fundación Ganamos Todos (2011)"
+  ],
+  "propuestas": [
+    "Plan integral de seguridad y control fronterizo",
+    "Creación de 500 mil nuevos empleos",
+    "Reducción de listas de espera en salud",
+    "Combate al ausentismo escolar y mejora educativa",
+    "Construcción acelerada de viviendas y erradicación de campamentos"
+  ],
+  "aprobacion": 4,
+  "posiciones": [2, 3, 2, 2, 2, 3, 2, 3, 2, 2],
+  "financiamiento": {
+    "total": 1500000000,
+    "tipo": {
+      "publico": 40,
+      "privado": 60
+    },
+    "fuentes_principales": [
+      {
+        "nombre": "Fondos públicos SERVEL",
+        "monto": 600000000,
+        "tipo": "publico"
+      },
+      {
+        "nombre": "Aportes simpatizantes independientes",
+        "monto": 450000000,
+        "tipo": "privado"
+      },
+      {
+        "nombre": "Colectas ciudadanas",
+        "monto": 300000000,
+        "tipo": "privado"
+      },
+      {
+        "nombre": "Financiamiento colectivo online",
+        "monto": 150000000,
+        "tipo": "privado"
+      }
+    ],
+    "reportes_servel": [
+      {
+        "fecha": "2025-08-18",
+        "tipo": "Inscripción candidatura",
+        "estado": "Aprobado"
+      },
+      {
+        "fecha": "2025-09-15",
+        "tipo": "Declaración de ingresos",
+        "estado": "En revisión"
+      },
+      {
+        "fecha": "2025-10-08",
+        "tipo": "Gastos campaña",
+        "estado": "Pendiente"
+      }
+    ],
+    "alertas": [
+      {
+        "tipo": "info",
+        "descripcion": "Candidatura independiente inscrita correctamente",
+        "estado": "Verificado"
+      },
+      {
+        "tipo": "advertencia",
+        "descripcion": "Propaganda electoral anticipada en redes sociales",
+        "estado": "En observación"
+      }
+    ],
+    "transparencia": 80
+  },
+  "noticias": [
+    {
+      "titulo": "Mayne-Nicholls inscribe candidatura presidencial independiente",
+      "fecha": "2025-08-18",
+      "fuente": "24 Horas TVN"
+    },
+    {
+      "titulo": "Harold Mayne-Nicholls sorprende en primer debate presidencial",
+      "fecha": "2025-09-11",
+      "fuente": "Diario Antofagasta"
+    }
+  ]
+}  
     ];
 
     // También cargamos noticias de fallback
