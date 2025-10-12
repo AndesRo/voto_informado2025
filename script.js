@@ -2451,7 +2451,87 @@ function reiniciarSimulador() {
 
     renderizarPreguntaActual();
     actualizarControlesSimulador();
+}function mostrarResultadoSimulador(compatibilidades) {
+    const resultado = document.getElementById('resultado-simulador');
+    const cuestionario = document.getElementById('cuestionario-voto');
+    const candidatoRecomendado = compatibilidades[0];
+    const otrosCandidatos = compatibilidades.slice(1);
+
+    resultado.innerHTML = `
+        <div class="resultado-titulo">¡Tu candidato compatible!</div>
+        <div class="resultado-subtitulo">Basado en tus respuestas, este candidato se alinea mejor con tus preferencias</div>
+        
+        <div class="candidato-recomendado perfil-ganador destacado">
+            <div class="candidato-recomendado-header">
+                <div class="candidato-recomendado-foto">
+                    <img src="${candidatoRecomendado.candidato.foto}" alt="${candidatoRecomendado.candidato.nombre}" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="candidato-iniciales" style="display: none;">
+                        ${obtenerIniciales(candidatoRecomendado.candidato.nombre)}
+                    </div>
+                </div>
+                <div class="candidato-recomendado-info">
+                    <h3>${candidatoRecomendado.candidato.nombre}</h3>
+                    <p class="candidato-recomendado-partido">${candidatoRecomendado.candidato.partido}</p>
+                </div>
+            </div>
+            
+            <div class="porcentaje-compatibilidad">${candidatoRecomendado.compatibilidad}%</div>
+            <div class="barra-compatibilidad">
+                <div class="barra-compatibilidad-progreso" style="width: ${candidatoRecomendado.compatibilidad}%"></div>
+            </div>
+            <div class="etiqueta-compatibilidad">Compatibilidad programática</div>
+            
+            <div class="acciones-perfil">
+                <button class="btn-principal" onclick="mostrarPerfil('${candidatoRecomendado.candidato.id}')">
+                    <i class="fas fa-user"></i> Ver Perfil Completo
+                </button>
+                <button class="btn-secundario" onclick="compartirResultado('${candidatoRecomendado.candidato.id}', ${candidatoRecomendado.compatibilidad})">
+                    <i class="fas fa-share"></i> Compartir Resultado
+                </button>
+            </div>
+        </div>
+
+        <div class="comparativa-candidatos">
+            <h4>Compatibilidad con otros candidatos</h4>
+            <div class="lista-compatibilidad">
+                ${otrosCandidatos.map(item => `
+                    <div class="item-compatibilidad" onclick="mostrarPerfil('${item.candidato.id}')">
+                        <span class="candidato-nombre">${item.candidato.nombre.split(' ')[0]} ${item.candidato.nombre.split(' ')[1]}</span>
+                        <span class="candidato-porcentaje">${item.compatibilidad}%</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+
+        <div class="detalles-compatibilidad">
+            <h4>Resumen de tus preferencias</h4>
+            ${respuestasUsuario.map((respuesta, index) => {
+                const pregunta = preguntasSimulador[index];
+                const opcionSeleccionada = pregunta.opciones.find(op => op.valor === respuesta);
+                return `
+                    <div class="detalle-compatibilidad">
+                        <div class="detalle-tema">${pregunta.tema}</div>
+                        <div class="detalle-respuesta">${opcionSeleccionada.texto}</div>
+                    </div>
+                `;
+            }).join('')}
+        </div>
+    `;
+
+    cuestionario.style.display = 'none';
+    resultado.style.display = 'block';
+    document.getElementById('btn-reiniciar').style.display = 'block';
+    document.getElementById('btn-finalizar').style.display = 'none';
+
+    // Scroll automático para que el usuario vea el resultado destacado primero
+    if (resultado) {
+        resultado.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
+
+
+
 
 // Compartir resultado
 function compartirResultado(candidatoId, compatibilidad) {
@@ -3437,3 +3517,4 @@ function enviarReporte(e) {
   alert("✅ Gracias por tu aporte. Revisaremos tu reporte pronto.");
   cerrarFormularioReporte();
 }
+
