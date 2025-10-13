@@ -11,7 +11,7 @@
 <!-- Open Graph / WhatsApp / Facebook -->
 <meta property="og:title" content="🇨🇱 Voto Informado Chile 2025">
 <meta property="og:description" content="Compara candidatos presidenciales chilenos 2025 y encuentra tu candidato compatible.">
-<meta property="og:image" content="https://andesro.github.io/voto_informado2025/images/favicon/image-1200x630.png">
+<meta property="og:image" content="https://andesro.github.io/voto_informado2025/images/favicon/og-image-1200x630.png">
 <meta property="og:url" content="https://andesro.github.io/voto_informado2025/">
 <meta property="og:type" content="website">
 
@@ -19,18 +19,22 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="🇨🇱 Voto Informado Chile 2025">
 <meta name="twitter:description" content="Compara candidatos presidenciales chilenos 2025 y encuentra tu candidato compatible.">
-<meta name="twitter:image" content="https://andesro.github.io/voto_informado2025/images/favicon/image-1200x630.png">
+<meta name="twitter:image" content="https://andesro.github.io/voto_informado2025/images/favicon/og-image-1200x630.png">
 <meta name="twitter:site" content="@andresromero">
 <meta name="twitter:creator" content="@andresromero">
 
 <!-- Favicon y Apple Touch Icons -->
-<link rel="apple-touch-icon" sizes="180x180" href="images/favicon/web-app-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="images/favicon/web-app-512x512.png">
-<link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="images/favicon/web-app-manifest-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon/web-app-manifest-192x192.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
 <link rel="manifest" href="manifest.json">
-<link rel="mask-icon" href="images/favicon/web-app-512x512.png" color="#1e3a8a">
-<link rel="shortcut icon" href="images/favicon/web-app-512x512.png">
+<link rel="mask-icon" href="images/favicon/web-app-manifest-512x512.png" color="#1e3a8a">
+<link rel="shortcut icon" href="images/favicon/favicon.ico">
 <meta name="theme-color" content="#1e3a8a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Voto Informado 2025">
+
 
     
     <!-- Preload de fuentes críticas -->
@@ -112,7 +116,7 @@
                     <i class="fas fa-balance-scale"></i> Comparar Candidatos
                 </button>
              <button class="btn-secundario" onclick="mostrarSeccion('verificador')">
-                    <i class="fas fa-search"></i> Ver Verificador de Datos
+                    <i class="fas fa-search"></i> Ver Verificador
              </button>
 
             </div>
@@ -174,7 +178,7 @@
     </div>
 </section>
 
-    <!-- Simulador de Voto Programático -->
+  <!-- Simulador de Voto Programático -->
     <section id="simulador" class="section">
         <div class="container">
             <h2>Simulador de Voto Programático</h2>
@@ -358,7 +362,10 @@
                 <div class="footer-social">
                     <h4>Sígueme en redes sociales</h4>
                     <div class="social-links">
-                        
+                        <a href="https://github.com/AndesRo" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
                         <a href="https://www.linkedin.com/in/romeromllq/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                             <i class="fab fa-linkedin"></i>
                             <span>LinkedIn</span>
@@ -390,9 +397,120 @@
     </footer>
 
     <script src="script.js"></script>
+
+    <!-- Popup de instalación PWA -->
+<div id="installPrompt" class="install-popup hidden">
+  <div class="popup-content">
+    <img src="images/favicon/web-app-manifest-192x192.png" alt="Logo" class="popup-logo">
+    <div>
+      <h3>📱 Instala Voto Informado 2025</h3>
+      <p>Accede más rápido. ¡Agrega la app a tu telefono</p>
+    </div>
+    <div class="popup-buttons">
+      <button id="installBtn">Instalar</button>
+      <button id="closeBtn">Ahora no</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.install-popup {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e3a8a;
+  color: white;
+  padding: 16px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  transition: all 0.3s ease-in-out;
+  width: 90%;
+  max-width: 380px;
+}
+
+.install-popup.hidden {
+  opacity: 0;
+  visibility: hidden;
+  bottom: -100px;
+}
+
+.popup-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.popup-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+}
+
+.popup-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.popup-buttons button {
+  background: white;
+  color: #1e3a8a;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.popup-buttons button:hover {
+  background: #e5e7eb;
+}
+</style>
+
+<script>
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const popup = document.getElementById('installPrompt');
+  popup.classList.remove('hidden');
+});
+
+document.getElementById('installBtn').addEventListener('click', async () => {
+  const popup = document.getElementById('installPrompt');
+  popup.classList.add('hidden');
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const choice = await deferredPrompt.userChoice;
+    if (choice.outcome === 'accepted') {
+      console.log('✅ Usuario instaló la app');
+    } else {
+      console.log('❌ Usuario canceló la instalación');
+    }
+    deferredPrompt = null;
+  }
+});
+
+document.getElementById('closeBtn').addEventListener('click', () => {
+  document.getElementById('installPrompt').classList.add('hidden');
+});
+</script>
+
+    <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('✅ Service Worker registrado'))
+    .catch(err => console.error('SW Error:', err));
+}
+</script>
+
 </body>
-
 </html>
-
-
-
