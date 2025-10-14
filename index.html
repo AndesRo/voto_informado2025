@@ -495,10 +495,24 @@ if ('serviceWorker' in navigator) {
     .catch(err => console.error('SW Error:', err));
 }
 </script>
+    <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
+<script>
+  window.botpressWebChat.init({
+    // Usa tu configUrl personalizado generado (el mismo del enlace "shareable")
+    configUrl: "https://files.bpcontent.cloud/2025/10/14/11/20251014112936-JOYKTATP.json",
+    // Puedes agregar estas líneas opcionales:
+    // botName: "VotoBot",
+    // avatarUrl: "URL_A_TU_LOGO",
+    // layout: "side",
+    // containerWidth: "350px"
+  });
+</script>
+
 
 </body>
 
 </html>
+
 
 
 
