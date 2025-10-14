@@ -496,28 +496,24 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-<!-- Chatbot Botpress -->
+<!-- Chatbot de Botpress -->
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const script = document.createElement("script");
-    script.src = "https://cdn.botpress.cloud/webchat/v3.3/inject.js";
-    script.onload = function() {
-      window.botpressWebChat.init({
-        configUrl: "https://files.bpcontent.cloud/2025/10/14/11/20251014112936-JOYKTATP.json",
-        showCloseButton: true,
-        showPoweredBy: false,
-        theme: "light",
-        themeColor: "#003366"
-      });
-    };
-    document.body.appendChild(script);
+  window.botpressWebChat = {
+    configUrl: "https://files.bpcontent.cloud/2025/10/14/11/20251014112936-JOYKTATP.json"
+  };
+</script>
+<script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
+<script>
+  window.addEventListener("load", function () {
+    window.botpressWebChat.init(window.botpressWebChat);
   });
 </script>
-<!-- Fin Chatbot Botpress -->
+
 
 </body>
 
 </html>
+
 
 
 
