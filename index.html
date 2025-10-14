@@ -495,24 +495,9 @@ if ('serviceWorker' in navigator) {
     .catch(err => console.error('SW Error:', err));
 }
 </script>
-
-<!-- Chatbot de Botpress -->
-<script>
-  window.botpressWebChat = {
-    configUrl: "https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/10/14/11/20251014112936-JOYKTATP.json"
-  };
-</script>
-<script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
-<script>
-  window.addEventListener("load", function () {
-    window.botpressWebChat.init(window.botpressWebChat);
-  });
-</script>
-
-
 </body>
-
 </html>
+
 
 
 
