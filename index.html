@@ -496,26 +496,29 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-<script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
+<!-- Chatbot Botpress -->
 <script>
-  window.botpressWebChat.init({
-    composerPlaceholder: "Escribe tu pregunta...",
-    botConversationDescription: "Asistente automatizado para resolver tus consultas.",
-    botId: "JOYKTATP", 
-    clientId: "default",
-    configUrl: "https://files.bpcontent.cloud/2025/10/14/11/20251014112936-JOYKTATP.json",
-    stylesheet: "https://cdn.botpress.cloud/webchat/v3.3/themes/default.css",
-    showCloseButton: true,
-    showPoweredBy: false,
-    enableTranscriptDownload: false,
-    useSessionStorage: true,
-    theme: "light", 
-    themeColor: "#003366", 
+  document.addEventListener("DOMContentLoaded", function() {
+    const script = document.createElement("script");
+    script.src = "https://cdn.botpress.cloud/webchat/v3.3/inject.js";
+    script.onload = function() {
+      window.botpressWebChat.init({
+        configUrl: "https://files.bpcontent.cloud/2025/10/14/11/20251014112936-JOYKTATP.json",
+        showCloseButton: true,
+        showPoweredBy: false,
+        theme: "light",
+        themeColor: "#003366"
+      });
+    };
+    document.body.appendChild(script);
   });
 </script>
+<!-- Fin Chatbot Botpress -->
+
 </body>
 
 </html>
+
 
 
 
