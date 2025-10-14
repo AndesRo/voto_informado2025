@@ -495,17 +495,25 @@ if ('serviceWorker' in navigator) {
     .catch(err => console.error('SW Error:', err));
 }
 </script>
-<!-- ...otros scripts... -->
+<!-- Chatbot Botpress -->
 <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
 <script>
   window.botpressWebChat.init({
-    configUrl: "https://files.bpcontent.cloud/2025/10/14/11/20251014112936-JOYKTATP.json"
+    composerPlaceholder: "Escribe tu pregunta...",
+    botConversationDescription: "Asistente automatizado para resolver tus consultas.",
+    botId: "JOYKTATP", // ID del bot (puede variar según configuración)
+    clientId: "default",
+    configUrl: "https://files.bpcontent.cloud/2025/10/14/11/20251014112936-JOYKTATP.json",
+    stylesheet: "https://cdn.botpress.cloud/webchat/v3.3/themes/default.css",
+    showCloseButton: true,
+    showPoweredBy: false,
+    enableTranscriptDownload: false,
+    useSessionStorage: true,
+    theme: "light", // o "dark"
+    themeColor: "#003366", // color corporativo Hormitec o de tu app
   });
 </script>
-</body>
-</html>
-
-
+<!-- Fin Chatbot Botpress -->
 </body>
 
 </html>
