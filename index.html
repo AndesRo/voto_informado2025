@@ -434,39 +434,7 @@ if ('serviceWorker' in navigator) {
 </script>
 
 <script src="script.js"></script>
-    <!-- Chatbot de Botpress (configuración remota) -->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  // Cargar el script principal del webchat
-  const script = document.createElement("script");
-  script.src = "https://cdn.botpress.cloud/webchat/v3.3/inject.js";
-  script.onload = function() {
-    // Inicializar el bot usando la configuración alojada en Botpress Cloud
-    window.botpressWebChat.init({
-      configUrl: "https://files.bpcontent.cloud/2025/10/14/11/20251014112936-JOYKTATP.json",
-      showCloseButton: true,
-      showPoweredBy: false,
-      theme: "light",
-      themeColor: "#3276EA"
-    });
-
-    // Esperar un poco antes de abrir automáticamente el chat con mensaje de bienvenida
-    setTimeout(() => {
-      window.botpressWebChat.sendEvent({ type: "show" }); // mostrar el chat
-      window.botpressWebChat.sendEvent({
-        type: "proactive-trigger",
-        channel: "web",
-        payload: {
-          text: "🇨🇱 ¡Hola! Soy tu asistente electoral de *Voto Informado 2025*. ¿Quieres conocer las propuestas de los candidatos presidenciales?"
-        }
-      });
-    }, 2000);
-  };
-  document.body.appendChild(script);
-});
-</script>
-
-
+   
 </body>
 </html>
 
