@@ -2634,5 +2634,66 @@ body {
 }
 
 
+.install-popup {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e3a8a;
+  color: white;
+  padding: 16px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  transition: all 0.3s ease-in-out;
+  width: 90%;
+  max-width: 380px;
+}
+
+.install-popup.hidden {
+  opacity: 0;
+  visibility: hidden;
+  bottom: -100px;
+}
+
+.popup-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.popup-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+}
+
+.popup-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.popup-buttons button {
+  background: white;
+  color: #1e3a8a;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.popup-buttons button:hover {
+  background: #e5e7eb;
+}
+
+
+
 
 
