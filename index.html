@@ -422,10 +422,9 @@ document.getElementById('installBtn').addEventListener('click', async () => {
 
 document.getElementById('closeBtn').addEventListener('click', () => {
   document.getElementById('installPrompt').classList.add('hidden');
-});
-</script>
+});
 
-    <script>
+   
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js')
     .then(() => console.log('✅ Service Worker registrado'))
